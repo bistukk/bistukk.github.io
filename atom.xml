@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>岛</title>
+  <icon>https://www.gravatar.com/avatar/9c1574b0c757155c8f77bf68c31dc230</icon>
+  <subtitle>面朝大海，春暖花开</subtitle>
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2022-11-08T13:57:18.816Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>Capper</name>
+    <email>2022011047@bistu.edu.cn</email>
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://example.com/2022/11/08/test/test/"/>
+    <id>http://example.com/2022/11/08/test/test/</id>
+    <published>2022-11-08T13:57:18.816Z</published>
+    <updated>2022-11-08T13:57:18.816Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>试</title>
+    <link href="http://example.com/2022/10/15/%E8%AF%95/"/>
+    <id>http://example.com/2022/10/15/%E8%AF%95/</id>
+    <published>2022-10-15T12:43:28.533Z</published>
+    <updated>2022-10-15T16:05:36.398Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2022/10/09/hello-world/"/>
+    <id>http://example.com/2022/10/09/hello-world/</id>
+    <published>2022-10-09T05:26:51.789Z</published>
+    <updated>2022-10-09T05:26:51.790Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
