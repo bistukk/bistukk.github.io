@@ -3,11 +3,11 @@
   <title>岛</title>
   <icon>https://www.gravatar.com/avatar/9c1574b0c757155c8f77bf68c31dc230</icon>
   <subtitle>面朝大海，春暖花开</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
-  <updated>2022-11-08T13:57:18.816Z</updated>
-  <id>http://example.com/</id>
+  <link href="https://bistukk.github.io/"/>
+  <updated>2023-07-06T08:20:25.955Z</updated>
+  <id>https://bistukk.github.io/</id>
   
   <author>
     <name>Capper</name>
@@ -17,9 +17,24 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>“落子无悔，抉择本身就是向前”——2022年度总结</title>
+    <link href="https://bistukk.github.io/2022/12/29/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+    <id>https://bistukk.github.io/2022/12/29/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/</id>
+    <published>2022-12-29T12:00:00.000Z</published>
+    <updated>2023-07-06T08:20:25.955Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;1、前言&quot;&gt;&lt;a href=&quot;#1、前言&quot; class=&quot;headerlink&quot; title=&quot;1、前言&quot;&gt;&lt;/a&gt;1、前言&lt;/h1&gt;&lt;p&gt;岁月不居，时节如流。一转眼，2022年已经来到了尾声，这一年里，经历了高考，度过了18岁的生日，踏上了大学的校园，遇见了许许多多的人，也经历了许许多多的事。这一年，对我来说，没有所谓的轰轰烈烈， 也没有所谓的刻骨铭心，吃过很多亏，做过很多傻事，当然，我也收获很多。年末之际，对此做些回顾与梳理，不失为一种享受，也算是对自己的反思总结。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title></title>
-    <link href="http://example.com/2022/11/08/test/test/"/>
-    <id>http://example.com/2022/11/08/test/test/</id>
+    <link href="https://bistukk.github.io/2022/11/08/test/test/"/>
+    <id>https://bistukk.github.io/2022/11/08/test/test/</id>
     <published>2022-11-08T13:57:18.816Z</published>
     <updated>2022-11-08T13:57:18.816Z</updated>
     
@@ -30,9 +45,43 @@
   </entry>
   
   <entry>
+    <title>test</title>
+    <link href="https://bistukk.github.io/2022/11/04/test/"/>
+    <id>https://bistukk.github.io/2022/11/04/test/</id>
+    <published>2022-11-04T08:51:36.000Z</published>
+    <updated>2023-07-10T14:34:14.173Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2023/07/10/fyHQn2XGReotmVg.jpg&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>photos</title>
+    <link href="https://bistukk.github.io/2022/10/15/photos/"/>
+    <id>https://bistukk.github.io/2022/10/15/photos/</id>
+    <published>2022-10-15T14:11:23.000Z</published>
+    <updated>2022-10-15T14:11:23.747Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>试</title>
-    <link href="http://example.com/2022/10/15/%E8%AF%95/"/>
-    <id>http://example.com/2022/10/15/%E8%AF%95/</id>
+    <link href="https://bistukk.github.io/2022/10/15/%E8%AF%95/"/>
+    <id>https://bistukk.github.io/2022/10/15/%E8%AF%95/</id>
     <published>2022-10-15T12:43:28.533Z</published>
     <updated>2022-10-15T16:05:36.398Z</updated>
     
@@ -51,9 +100,44 @@
   </entry>
   
   <entry>
+    <title>title</title>
+    <link href="https://bistukk.github.io/2022/10/13/title/"/>
+    <id>https://bistukk.github.io/2022/10/13/title/</id>
+    <published>2022-10-13T07:49:48.000Z</published>
+    <updated>2022-10-13T07:49:48.589Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>first</title>
+    <link href="https://bistukk.github.io/2022/10/09/first/"/>
+    <id>https://bistukk.github.io/2022/10/09/first/</id>
+    <published>2022-10-09T07:07:17.000Z</published>
+    <updated>2022-10-09T07:10:49.348Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;不要强求不可知，要从已知推未知。&lt;/p&gt;
+</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Hello World</title>
-    <link href="http://example.com/2022/10/09/hello-world/"/>
-    <id>http://example.com/2022/10/09/hello-world/</id>
+    <link href="https://bistukk.github.io/2022/10/09/hello-world/"/>
+    <id>https://bistukk.github.io/2022/10/09/hello-world/</id>
     <published>2022-10-09T05:26:51.789Z</published>
     <updated>2022-10-09T05:26:51.790Z</updated>
     
