@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2023-07-25T15:58:49.199Z</updated>
+  <updated>2023-10-07T14:49:00.450Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题）</title>
+    <link href="https://bistukk.github.io/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%A0%86%EF%BC%88%E5%90%91%E4%B8%8A%E8%B0%83%E6%95%B4%E6%B3%95-%E5%90%91%E4%B8%8B%E8%B0%83%E6%95%B4%E6%B3%95%E3%80%81%E5%BB%BA%E5%A0%86%E3%80%81%E5%A0%86%E6%8E%92%E5%BA%8F%E3%80%81TopK%E9%97%AE%E9%A2%98%EF%BC%89/"/>
+    <id>https://bistukk.github.io/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%A0%86%EF%BC%88%E5%90%91%E4%B8%8A%E8%B0%83%E6%95%B4%E6%B3%95-%E5%90%91%E4%B8%8B%E8%B0%83%E6%95%B4%E6%B3%95%E3%80%81%E5%BB%BA%E5%A0%86%E3%80%81%E5%A0%86%E6%8E%92%E5%BA%8F%E3%80%81TopK%E9%97%AE%E9%A2%98%EF%BC%89/</id>
+    <published>2023-10-07T14:25:43.000Z</published>
+    <updated>2023-10-07T14:49:00.450Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;堆&quot;&gt;&lt;a href=&quot;#堆&quot; class=&quot;headerlink&quot; title=&quot;堆&quot;&gt;&lt;/a&gt;堆&lt;/h1&gt;&lt;h2 id=&quot;一、堆的基本概念和性质&quot;&gt;&lt;a href=&quot;#一、堆的基本概念和性质&quot; class=&quot;headerlink&quot; title=&quot;一、堆的基本概念和性质&quot;&gt;&lt;/a&gt;一、堆的基本概念和性质&lt;/h2&gt;&lt;p&gt;堆(heap)是一个&lt;strong&gt;完全二叉树&lt;/strong&gt;，并且满足以下性质：&lt;strong&gt;每个节点的值都大于或等于其左右孩子节点的值，称为大根堆；或是每个节点的值都小于或等于其左右孩子的值，称为小根堆。&lt;/strong&gt;  &lt;/p&gt;
+&lt;p&gt;复习：&lt;span style=&quot;background-color: yellow;&quot;&gt;完全二叉树&lt;/span&gt;&lt;br&gt;设二叉树的深度为h，除第h层外，其它各层（1 ~ h-1）的节点数都达到最大个数，第h层所有的节点都连续集中在最左边，这就是完全二叉树。  &lt;/p&gt;
+&lt;p&gt;完全二叉树：&lt;br&gt;&lt;img src=&quot;https://s2.loli.net/2023/10/07/gay81A3SlPc7Ndu.png&quot; alt=&quot;完全二叉树.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>“落子无悔，抉择本身就是向前”——2022年度总结</title>

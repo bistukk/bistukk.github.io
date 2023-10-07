@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+       
+      <meta name="keywords" content="生活，旅行，思考，代码，博客" />
+       
+      <meta name="description" content="一座孤岛" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题） |  L I V E</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="L I V E" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-数据结构——堆（向上调整法-向下调整法、建堆、堆排序、TopK问题）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题）
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%A0%86%EF%BC%88%E5%90%91%E4%B8%8A%E8%B0%83%E6%95%B4%E6%B3%95-%E5%90%91%E4%B8%8B%E8%B0%83%E6%95%B4%E6%B3%95%E3%80%81%E5%BB%BA%E5%A0%86%E3%80%81%E5%A0%86%E6%8E%92%E5%BA%8F%E3%80%81TopK%E9%97%AE%E9%A2%98%EF%BC%89/" class="article-date">
+  <time datetime="2023-10-07T14:25:43.000Z" itemprop="datePublished">2023-10-07</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">11 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><h2 id="一、堆的基本概念和性质"><a href="#一、堆的基本概念和性质" class="headerlink" title="一、堆的基本概念和性质"></a>一、堆的基本概念和性质</h2><p>堆(heap)是一个<strong>完全二叉树</strong>，并且满足以下性质：<strong>每个节点的值都大于或等于其左右孩子节点的值，称为大根堆；或是每个节点的值都小于或等于其左右孩子的值，称为小根堆。</strong>  </p>
+<p>复习：<span style="background-color: yellow;">完全二叉树</span><br>设二叉树的深度为h，除第h层外，其它各层（1 ~ h-1）的节点数都达到最大个数，第h层所有的节点都连续集中在最左边，这就是完全二叉树。  </p>
+<p>完全二叉树：<br><img src="https://s2.loli.net/2023/10/07/gay81A3SlPc7Ndu.png" alt="完全二叉树.png"></p>
+<span id="more"></span>  
+<p>非完全二叉树：<br><img src="https://s2.loli.net/2023/10/07/fmoSUkZwAWRg37q.png" alt="非完全二叉树.png"><br>堆：<br><img src="https://s2.loli.net/2023/10/07/hdSCfPibUsvIuBJ.png" alt="堆.png"><br><strong>从堆的概念不难看出，大根堆堆顶为集合的最大值，小根堆堆顶为集合的最小值</strong>  </p>
+<p>  <strong>堆的存储</strong><br>  那么在数据结构中，我们如何存储堆呢？由于堆是一个完全二叉树，这就决定了每个节点的相对位置是固定的，所以这里我们不同于以往的用链表来存储，我们采用一种<span style="background-color: yellow;">船新的存储方式：用一个一维数组来存储堆</span>。为了方便操作，我们采用下标从1开始，<strong>下标1的位置就是根节点，节点x的左儿子是2x,节点x的右儿子是2x + 1</strong><br> <img src="https://s2.loli.net/2023/10/07/k3CJw2iUjxZs4hE.png" alt="堆的存储.png"></p>
+<h2 id="二、堆的两个基本操作（down、up）"><a href="#二、堆的两个基本操作（down、up）" class="headerlink" title="二、堆的两个基本操作（down、up）"></a>二、堆的两个基本操作（down、up）</h2><h3 id="1、向上调整法"><a href="#1、向上调整法" class="headerlink" title="1、向上调整法"></a>1、向上调整法</h3><p>向上调整法用于除最后一个元素意外，其余节点均满足堆的性质时，我们用向上调整法将最后一个节点调整成堆。具体做法如下（以小跟堆为例）：<br><strong>从最后一个节点开始，比较该节点和其父节点的大小，如果该节点的值小于父节点的值，则进行交换。一直到该节点到堆顶或者该节点的值大于等于父节点的值时结束。</strong><br><img src="https://s2.loli.net/2023/10/07/yMtiC7u8UkjVbrf.png" alt="向上调整法.png">  </p>
+<p>那么，具体代码该如何实现呢？我们知道了从父亲推出左右儿子的关系为x &#x3D; 2x 和 x &#x3D; 2x + 1，那知道当前节点的下标，可以反推其父亲节点的下标。假设该节点下标为u，则其父亲节点下标为u &#x2F; 2或者是(u - 1) &#x2F; 2，那经过向下取整的规则后，其父节点下标可以直接写为u &#x2F; 2,那我们就可以写出代码了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//h[]为堆（数组）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">up</span><span class="params">(<span class="type">int</span> u)</span></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(u &gt; <span class="number">1</span> &amp;&amp; h[u] &lt; h[u / <span class="number">2</span>]&gt;)&#123;</span><br><span class="line">        <span class="built_in">swap</span>(h[u], h[u / <span class="number">2</span>]);</span><br><span class="line">        u /= <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2、向下调整法"><a href="#2、向下调整法" class="headerlink" title="2、向下调整法"></a>2、向下调整法</h3><p>向下调整法是从上向下调，该方法在建堆，解决排序等问题上有重大作用，所以应当重点掌握。对于采用向下调整法来说，应该满足条件：该根节点左右子树均为大堆或者均为小堆，只有根节点不满足，这时候我们采用向下调整法来将整个树调整成堆。具体做法如下（以小根堆为例）：<br><strong>从根节点开始，比较该节点与其左右孩子节点的值，如果该节点的值大于孩子节点的值，将其与左右孩子中较小的那个进行交换，一直到该节点为最后一层或者该节点的值小于等于左右孩子节点的值时结束。</strong><br><img src="https://s2.loli.net/2023/10/07/25mYzOR7TAHBbrD.png" alt="向下调整法.png"></p>
+<p>代码实现思路：从根节点，左右孩子节点中比较出最大的那个，如果最大的那个节点是孩子节点，则将根节点与孩子节点进行交换，假设根节点小标为u，则左孩子节点下标为2u,右孩子节点下标为2u + 1,假设节点数为my_size，则代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> u)</span></span>&#123;</span><br><span class="line">    <span class="comment">//定义一个变量t来表示最大值下标</span></span><br><span class="line">    <span class="type">int</span> t = u;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//如果父亲有左孩子，并且左孩子为最小值。</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="number">2</span> * u &lt;= my_size &amp;&amp; h[<span class="number">2</span> * u] &lt; h[t]) t = <span class="number">2</span> * u;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//如果父亲有右孩子，并且右孩子为最小值。</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="number">2</span> * u + <span class="number">1</span> &lt;= my_size &amp;&amp; h[<span class="number">2</span> * u + <span class="number">1</span>] &lt; h[t]) t = <span class="number">2</span> * u + <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果最小值变化了，说明需要调堆，则交换。</span></span><br><span class="line">    <span class="keyword">if</span>(t != u)&#123;</span><br><span class="line">        <span class="built_in">swap</span>(h[t], h[u]);</span><br><span class="line">        <span class="built_in">down</span>(t);    </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="三、堆的一些操作"><a href="#三、堆的一些操作" class="headerlink" title="三、堆的一些操作"></a>三、堆的一些操作</h2><p><strong>1、插入一个数</strong><br>该操作其实就是向上调整法的应用，将该数插入到数组末尾，然后进行向上调整操作即可。  </p>
+<blockquote>
+<p>heap[my_size++] &#x3D; x; up(my_size);  </p>
+</blockquote>
+<p><strong>2、求集合当中的最值</strong><br>直接返回堆顶元素即可。</p>
+<blockquote>
+<p>return h[1];  </p>
+</blockquote>
+<p><strong>3、删除集合中的最值</strong><br>删除集合中的最值我们采用覆盖的方法，即将最后一个节点的值覆盖到根节点的值，再将my_size–,然后对新的根节点进行向下调整操作即可。为什么要这么做呢？<strong>因为我们使用数组储存的堆结构，而删除第一个元素的话，后面的元素都会进行改变且结构被破坏，比较麻烦。而如果我们用最后一个元素去覆盖的话，前面的其他元素不需要进行改变且维持原有堆结构保持不变（除了新覆盖的根节点不满足），我们只需要将根节点down()操作一下即可，非常方便。</strong><br><img src="https://s2.loli.net/2023/10/07/WVLJAjKUk6vMzql.png" alt="删除集合中的最值.png"></p>
+<blockquote>
+<p>heap[1] &#x3D; heap[my_size–]; down(1);  </p>
+</blockquote>
+<p><strong>4、删除任意一个元素</strong><br>删除任意一个元素，假设删除第k个元素，则需要将末尾元素覆盖第k个元素，然后将,my_size–，然后得分情况（以小跟堆为例），如果是变大的话，需要down()一下，如果是是变小的话，需要down()一下，这里我们直接将两个都写，因为这里两个中只会执行一个。</p>
+<blockquote>
+<p>heap[k] &#x3D; heap[my_size–]; up(k); down(k);  </p>
+</blockquote>
+<p><strong>5、修改任意一个元素</strong><br>修改任意一个元素与前面同理。</p>
+<blockquote>
+<p>heap[k] &#x3D; x; down(k); up(k);</p>
+</blockquote>
+<h2 id="四、堆排序、TopK问题"><a href="#四、堆排序、TopK问题" class="headerlink" title="四、堆排序、TopK问题"></a>四、堆排序、TopK问题</h2><h3 id="建堆"><a href="#建堆" class="headerlink" title="建堆"></a>建堆</h3><p>知道了堆的基本性质和操作，那给定一个无序数组如何将其建成大堆呢？我们可以用向上调整法和向下调整法。这里我们采用<strong>向下调整法建堆，因为其时间复杂度优于一个一个插入的向上调整法（时间复杂度为O（NlogN）。用向下调整法建堆的时间复杂度为O（N）</strong>，具体建堆过程分析如下：<br>我们从最后一个非叶子结点开始递归向上进行down操作（叶结点自然不用调整），假设总共有n个节点,则最后一个非叶子节点下标为n &#x2F; 2，则我们从n &#x2F; 2处开始进行向下调整即可。<br><img src="https://s2.loli.net/2023/10/07/8IicoWXypqMbSrx.png" alt="建堆过程.png"><br>代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = n / <span class="number">2</span>; i ; i--)&#123;</span><br><span class="line">    <span class="built_in">down</span>(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>向下调整时间复杂度分析</strong>：<br>假设右n个节点，从倒数第二层开始，该层有n&#x2F;4个节点，每个节点需要调一次，倒数第三层，该层有n&#x2F;8个节点，每个节点需要调两次,依次类推，时间复杂度为：</p>
+<blockquote>
+<p>n&#x2F;4 * 1 + n&#x2F;8 * 2 + n&#x2F;16 * 3 + n&#x2F;32 * 4 +…<br>&#x3D; n(1&#x2F;2^2 + 2&#x2F;2^3 + 3&#x2F;2^4 + 4&#x2F;2^4 + …)<br>令S &#x3D; 1&#x2F;2^2 + 2&#x2F;2^3 + 3&#x2F;2^4 + 4&#x2F;2^5 + …<br>则2S &#x3D; 1&#x2F;2 + 2&#x2F;2^2 + 3&#x2F;2^3 + 4&#x2F;2^4 + …<br>2S - S &#x3D; S &#x3D;1&#x2F;2 + 2&#x2F;2^2 + 1&#x2F;2^3 + 1&#x2F;2^4 + … &lt; 1<br>则n(1&#x2F;2^2 + 2&#x2F;2^3 + 3&#x2F;2^4 + 4&#x2F;2^4 + …) &lt; n</p>
+</blockquote>
+<p>故时间复杂度小于N,进一步分析可知<strong>向下调整建堆的时间复杂度为O（N）</strong></p>
+<h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><p>我们来利用堆的性质来进行排序。如果要排升序或者降序，我们应该建大堆还是小堆呢？答案是<strong>排升序，建大堆；排降序，建小堆</strong>。原因是我们要在原数组上进行排序的话，以排升序为例，我们假如建小堆，那么每次的根节点将是当前最小值，而下一步的话最小值根节点为左孩子或者右孩子，这样继续排下去的话，整个堆的结构会被打乱，无法满足要求。而我们采用前面删除的思想，建大堆。每次只需将堆顶和堆底元素进行交换，然后对堆顶进行向下调整，每次都能将最大值放入后面正确的位置，且前面的堆结构维持不变。具体过程如下：<br><img src="https://s2.loli.net/2023/10/07/sL8AXGUB1kViafF.png" alt="堆排序过程.png"><br>代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(my_size &gt;= <span class="number">1</span>)&#123;</span><br><span class="line">    <span class="built_in">swap</span>(h[<span class="number">1</span>], h[my_size--]);</span><br><span class="line">    <span class="built_in">down</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>堆排序时间复杂度：向下调整N次，每次调整为O(logN),建堆为O(N)，则为O(N + NlogN),即为O(NlogN);</strong></p>
+<h3 id="Topk问题"><a href="#Topk问题" class="headerlink" title="Topk问题"></a>Topk问题</h3><p>接下来我们来看一个经典问题：<span style="background-color: yellow;">Topk问题</span></p>
+<p><strong>题目：输入一个长度为 n的整数数列，从小到大输出前 m小的数。</strong><br>此题我们可以用快排等排序来做，  今天我们用堆来做（堆在处理海量数据时具有重要应用）<br>思路：题目要求我们从小到大输出前m小的数,那么我们可以构造一个小根堆，每次取出堆顶元素即可。具体代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100010</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> h[N], MySize;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> u)</span></span>&#123;</span><br><span class="line">    <span class="comment">//用t来表示三个点里最小值的编号</span></span><br><span class="line">    <span class="type">int</span> t = u;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果父亲有左孩子，并且左孩子小于父亲。</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="number">2</span> * u &lt;= MySize &amp;&amp; h[<span class="number">2</span> * u] &lt; h[t]) t = <span class="number">2</span> * u;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果父亲有右孩子，并且右孩子小于父亲。</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="number">2</span> * u + <span class="number">1</span> &lt;= MySize &amp;&amp; h[<span class="number">2</span> * u + <span class="number">1</span>] &lt; h[t]) t= <span class="number">2</span> * u + <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果最小值变化了，说明需要调堆，则交换。</span></span><br><span class="line">    <span class="keyword">if</span>(t != u)&#123;</span><br><span class="line">        <span class="built_in">swap</span>(h[u], h[t]);</span><br><span class="line">        <span class="built_in">down</span>(t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">    MySize = n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        cin &gt;&gt; h[i];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//从n / 2，即最后一个孩子的父亲开始调。</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = n / <span class="number">2</span>; i ; i--)&#123;</span><br><span class="line">        <span class="built_in">down</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(m--)&#123;</span><br><span class="line">        cout &lt;&lt; h[<span class="number">1</span>] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">        h[<span class="number">1</span>] = h[MySize--];</span><br><span class="line">        <span class="built_in">down</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><ul>
+<li>本篇文章主要介绍了堆的基本概念和性质</li>
+<li>重点介绍了堆的两个基本操作：<strong>向上调整法(up)和向下调整法(down)</strong> ，向下调整法的应用较多，应当重点掌握。</li>
+<li>接着我们介绍了基于up和down两种操作的一些堆能实现的操作，<strong>插入一个数、求集合中的最值、删除集合中的最值、删除任意一个元素、修改任意一个元素</strong> ，以及删除时的覆盖思想。</li>
+<li>重点分析了建堆的过程：<strong>堆排序和Topk问题</strong>，了解了建堆的方法以及时间复杂度，<strong>一个一个元素插入+向上调整法建堆的时间复杂度是O(N*longN),而从最后一个非叶子节点开始递归向上进行向下调整法建堆的时间复杂度为O(N)</strong> 。</li>
+<li>了解了堆的应用，堆排序、Topk问题，知道<strong>排升序，建大堆；排降序，建小堆</strong>。堆在Topk问题上重要应用，我们只需要关注前k个数。堆还有很多重要作用，海量数据时Topk的问题，外排序等内容。</li>
+<li><span style="background-color: yellow;">一个元素要成为Topk，经历的过程可不简单，那么我们何尝不是如此？所以，加油吧，朋友。</span><blockquote>
+<p>以上就是关于堆的入门的全部内容了，如果文章有什么错误或者遇到什么问题，欢迎随时和我交流联系。</p>
+</blockquote>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bistukk.github.io/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%A0%86%EF%BC%88%E5%90%91%E4%B8%8A%E8%B0%83%E6%95%B4%E6%B3%95-%E5%90%91%E4%B8%8B%E8%B0%83%E6%95%B4%E6%B3%95%E3%80%81%E5%BB%BA%E5%A0%86%E3%80%81%E5%A0%86%E6%8E%92%E5%BA%8F%E3%80%81TopK%E9%97%AE%E9%A2%98%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2022/12/29/2022%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">“落子无悔，抉择本身就是向前”——2022年度总结</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+    
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022-2023
+        <i class="ri-heart-fill heart_icon"></i> Capper
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="L I V E"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
