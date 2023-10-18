@@ -63,7 +63,7 @@
 <span id="more"></span>
 <h2 id="高精度加法是什么？"><a href="#高精度加法是什么？" class="headerlink" title="高精度加法是什么？"></a>高精度加法是什么？</h2><p>百科上的定义：高精度加法是信息学的一种重要算法。这种算法使用多个存储单位进行计算，因此它的计算范围超过一般使用一个存储单位的算法。所谓高精度加法，其实就是<strong>竖式加法</strong>，竖式加法我们在小学2年半的时候都学过，例如我要实现114 + 514，那就是：<br><img src="https://s2.loli.net/2023/10/18/2DF5GTCgQUMhOHW.png" alt="竖式加法.jpg">   </p>
 <p>如上图所示，我们从个位开始相加，4 + 4 &#x3D; 8，然后到十位，1 + 1 &#x3D; 2，接着到百位，1 + 5 &#x3D; 6，所得结果就是628。所示例子没有进位，如果有进位的话，需要加上进位值。如9 + 3，需要进1，本位是2。</p>
-<h2 id="为什么需要高精度加法？"><a href="#为什么需要高精度加法？" class="headerlink" title="为什么需要高精度加法？"></a>为什么需要高精度加法？</h2><p>高精度加法原来就是所谓的竖式相加，这不是小学生都会吗？其实，高精度加法在计算机算法中有着重要的应用。我们知道,在C&#x2F;C++语言中，通常来说（32位机器）,**int、long类型占32位，long long类型占64位，而最大的类型unsigned long long能表示的最大数也就才(1e19+8e18)**，如果要几百位的数来进行相加，那就不行了，所以，我们就可以使用高精度来计算，高精度一般也会用来处理大数相加的问题。</p>
+<h2 id="为什么需要高精度加法？"><a href="#为什么需要高精度加法？" class="headerlink" title="为什么需要高精度加法？"></a>为什么需要高精度加法？</h2><p>高精度加法原来就是所谓的竖式相加，这不是小学生都会吗？其实，高精度加法在计算机算法中有着重要的应用。我们知道,在C&#x2F;C++语言中，通常来说（32位机器）,<strong>int、long类型占32位，long long类型占64位，而最大的类型unsigned long long能表示的最大数也就才(1e19+8e18)</strong> ，如果要几百位的数来进行相加，那就不行了，所以，我们就可以使用高精度来计算，高精度一般也会用来处理大数相加的问题。</p>
 <h2 id="高精度加法实现（C-）"><a href="#高精度加法实现（C-）" class="headerlink" title="高精度加法实现（C++）"></a>高精度加法实现（C++）</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将两个大数采用字符串的形式输入，然后模拟竖式加法的过程，<strong>用两个指针，先从个位开始相加（即字符串的最后一位），我们定义一个变量add来存进位值（如果没有进位则为0），然后逐步往高位移动，继续相加。考虑到两个数位数会有不一样的情况，有一个先加完，一个后加完，那我们采取将先加完的数的剩余位默认补0的方式即可</strong>，具体代码实现如下。</p>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">addStrings</span><span class="params">(string num1, string num2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//从个位开始相加，初始化进位add为0</span></span><br><span class="line">        <span class="type">int</span> i = num1.<span class="built_in">length</span>() - <span class="number">1</span>, j = num2.<span class="built_in">length</span>() - <span class="number">1</span>, add = <span class="number">0</span>;</span><br><span class="line">        string ans = <span class="string">&quot;&quot;</span>;<span class="comment">//定义一个空字符串来拼接答案</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//当其中一个数没加完或者进位大于0时执行循环</span></span><br><span class="line">        <span class="keyword">while</span>(i &gt;= <span class="number">0</span> || j &gt;= <span class="number">0</span> || add &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//当前位数没有加完则为本身，加完的话则默认为补的0</span></span><br><span class="line">            <span class="type">int</span> x = i &gt;= <span class="number">0</span> ? num1[i] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> y = j &gt;= <span class="number">0</span> ? num2[j] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> result = x + y + add;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//将当前位的值加入ans</span></span><br><span class="line">            ans.<span class="built_in">push_back</span>(<span class="string">&#x27;0&#x27;</span> + result % <span class="number">10</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//更新进位值</span></span><br><span class="line">            add = result / <span class="number">10</span>;</span><br><span class="line">            i--;</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//由于每一位插入时是尾插导致低位在前，翻转一下即可</span></span><br><span class="line">        <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(), ans.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -85,11 +85,6 @@
 <p>以上就是字符串相加、经典大数相加算法(高精度加法)入门的全部内容了，如果文章有什问题或者错误，或者有什么建议和想法，欢迎随时和我交流。</p>
 </blockquote>
 ]]></content>
-  </entry>
-  <entry>
-    <title>试</title>
-    <url>/2022/10/15/%E8%AF%95/</url>
-    <content><![CDATA[<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3>]]></content>
   </entry>
   <entry>
     <title>数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题）</title>
@@ -153,6 +148,11 @@
 </li>
 </ul>
 ]]></content>
+  </entry>
+  <entry>
+    <title>试</title>
+    <url>/2022/10/15/%E8%AF%95/</url>
+    <content><![CDATA[<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3>]]></content>
   </entry>
   <entry>
     <title></title>
