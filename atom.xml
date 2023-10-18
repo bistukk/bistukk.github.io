@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2023-10-07T14:49:00.450Z</updated>
+  <updated>2023-10-18T05:17:40.853Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,24 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何将两个很大的数进行相加？</title>
+    <link href="https://bistukk.github.io/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/"/>
+    <id>https://bistukk.github.io/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/</id>
+    <published>2023-10-18T03:40:00.000Z</published>
+    <updated>2023-10-18T05:17:40.853Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;经典大数相加算法、高精度加法&quot;&gt;&lt;a href=&quot;#经典大数相加算法、高精度加法&quot; class=&quot;headerlink&quot; title=&quot;经典大数相加算法、高精度加法&quot;&gt;&lt;/a&gt;经典大数相加算法、高精度加法&lt;/h1&gt;&lt;h2 id=&quot;引言&quot;&gt;&lt;a href=&quot;#引言&quot; class=&quot;headerlink&quot; title=&quot;引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;先上一道题&lt;/strong&gt;：&lt;a href=&quot;https://leetcode.cn/problems/add-strings/&quot;&gt;&lt;strong&gt;LC415.字符串相加&lt;/strong&gt;&lt;/a&gt;     &lt;/p&gt;
+&lt;p&gt;给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;对于这道题，可能很多朋友会想到将两个字符转为数字，然后将其进行相加，最后将结果再转为字符串。这种方式可行，但是如果数字非常大呢？大到连long long 都不够加呢?那我们就得请出我们的主角：&lt;strong&gt;高精度加法&lt;/strong&gt;。  &lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题）</title>

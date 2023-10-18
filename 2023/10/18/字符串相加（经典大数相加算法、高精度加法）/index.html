@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+       
+      <meta name="keywords" content="生活，旅行，思考，代码，博客" />
+       
+      <meta name="description" content="一座孤岛" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>如何将两个很大的数进行相加？ |  L I V E</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="L I V E" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-字符串相加（经典大数相加算法、高精度加法）"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  如何将两个很大的数进行相加？
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/" class="article-date">
+  <time datetime="2023-10-18T03:40:00.000Z" itemprop="datePublished">2023-10-18</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.6k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">5 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="经典大数相加算法、高精度加法"><a href="#经典大数相加算法、高精度加法" class="headerlink" title="经典大数相加算法、高精度加法"></a>经典大数相加算法、高精度加法</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>先上一道题</strong>：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-strings/"><strong>LC415.字符串相加</strong></a>     </p>
+<p>给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。</p>
+<hr>
+<p>对于这道题，可能很多朋友会想到将两个字符转为数字，然后将其进行相加，最后将结果再转为字符串。这种方式可行，但是如果数字非常大呢？大到连long long 都不够加呢?那我们就得请出我们的主角：<strong>高精度加法</strong>。  </p>
+<span id="more"></span>
+<h2 id="高精度加法是什么？"><a href="#高精度加法是什么？" class="headerlink" title="高精度加法是什么？"></a>高精度加法是什么？</h2><p>百科上的定义：高精度加法是信息学的一种重要算法。这种算法使用多个存储单位进行计算，因此它的计算范围超过一般使用一个存储单位的算法。所谓高精度加法，其实就是<strong>竖式加法</strong>，竖式加法我们在小学2年半的时候都学过，例如我要实现114 + 514，那就是：<br><img src="https://s2.loli.net/2023/10/18/2DF5GTCgQUMhOHW.png" alt="竖式加法.jpg">   </p>
+<p>如上图所示，我们从个位开始相加，4 + 4 &#x3D; 8，然后到十位，1 + 1 &#x3D; 2，接着到百位，1 + 5 &#x3D; 6，所得结果就是628。所示例子没有进位，如果有进位的话，需要加上进位值。如9 + 3，需要进1，本位是2。</p>
+<h2 id="为什么需要高精度加法？"><a href="#为什么需要高精度加法？" class="headerlink" title="为什么需要高精度加法？"></a>为什么需要高精度加法？</h2><p>高精度加法原来就是所谓的竖式相加，这不是小学生都会吗？其实，高精度加法在计算机算法中有着重要的应用。我们知道,在C&#x2F;C++语言中，通常来说（32位机器）,**int、long类型占32位，long long类型占64位，而最大的类型unsigned long long能表示的最大数也就才(1e19+8e18)**，如果要几百位的数来进行相加，那就不行了，所以，我们就可以使用高精度来计算，高精度一般也会用来处理大数相加的问题。</p>
+<h2 id="高精度加法实现（C-）"><a href="#高精度加法实现（C-）" class="headerlink" title="高精度加法实现（C++）"></a>高精度加法实现（C++）</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将两个大数采用字符串的形式输入，然后模拟竖式加法的过程，<strong>用两个指针，先从个位开始相加（即字符串的最后一位），我们定义一个变量add来存进位值（如果没有进位则为0），然后逐步往高位移动，继续相加。考虑到两个数位数会有不一样的情况，有一个先加完，一个后加完，那我们采取将先加完的数的剩余位默认补0的方式即可</strong>，具体代码实现如下。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><pre><code class="cpp">class Solution &#123;
+public:
+    string addStrings(string num1, string num2) &#123;
+        //从个位开始相加，初始化进位add为0
+        int i = num1.length() - 1, j = num2.length() - 1, add = 0;
+        string ans = &quot;&quot;;//定义一个空字符串来拼接答案
+        
+        //当其中一个数没加完或者进位大于0时执行循环
+        while(i &gt;= 0 || j &gt;= 0 || add &gt; 0)&#123;
+            //当前位数没有加完则为本身，加完的话则默认为补的0
+            int x = i &gt;= 0 ? num1[i] - &#39;0&#39; : 0;
+            int y = j &gt;= 0 ? num2[j] - &#39;0&#39; : 0;
+            int result = x + y + add;
+            
+            //将当前位的值加入ans
+            ans.push_back(&#39;0&#39; + result % 10);
+            
+            //更新进位值
+            add = result / 10;
+            i--;
+            j--;
+        &#125;
+        
+        //由于每一位插入时是尾插导致低位在前，翻转一下即可
+        reverse(ans.begin(), ans.end());
+        return ans;
+    &#125;
+&#125;;
+</code></pre>
+<ul>
+<li>时间复杂度：O(max(len1, len2))，其中len1和len2分别为两字符串的长度。  </li>
+<li>空间复杂度：O(1)，我们只需要常数空间来存储若干变量。</li>
+</ul>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-binary/"><strong>LC67.二进制求和</strong></a>    </p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-two-numbers/"><strong>LC2.两数相加</strong></a>    </p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-two-numbers-ii/description/"><strong>LC445.两数相加II</strong></a>    </p>
+<hr>
+<p>这里我们研究一下两数相加这题，题目如下：  </p>
+<p><strong>LC2.两数相加</strong><br>给你两个非空的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个节点只能存储一位数字。<br>请你将两个数相加，并以相同形式返回一个表示和的链表。<br>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。<br><img src="https://s2.loli.net/2023/10/18/OfD6LoA2caST81m.png" alt="add-two.png"></p>
+<h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>如果仔细看完高精度加法的内容的话，会发现，这也不还是相当于模拟加法的过程吗?只是存储形式从字符串变为了链表而已。我们先<strong>把两链表头看成最低位即个位，开始进行相加，同样我们也用一个变量add来存储进位值，接着进行下一个节点的相加，一直到链表为空,同样也是会有一个链表先走完的情况，那我们将先走完的剩下的空位补0即可</strong>。</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><pre><code class="cpp">class Solution &#123;
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) &#123;
+        //创建头指针和尾指针
+        ListNode* head = nullptr, *tail = nullptr;
+        
+        //定义变量表示进位值，初始化为0
+        int add = 0;
+    
+        //当其中一个链表不为空时或者进位值不为0时进行循环
+        while(l1 || l2 || add &gt; 0)&#123;
+            int x = l1 ? l1 -&gt; val : 0;
+            int y = l2 ? l2 -&gt; val : 0;
+            int sum = x + y + add;
+            
+            //创建一个节点来存储相加后当前位的值
+            ListNode* tmp = new ListNode(sum % 10);
+            if(!head)&#123;
+                head = tail = tmp;
+            &#125; else &#123;
+                tail -&gt; next = tmp;
+                tail = tail -&gt; next;//更新tail
+            &#125;
+            add = sum / 10;//更新进位值
+            
+            //迭代往下走
+            if(l1) l1 = l1 -&gt; next;
+            if(l2) l2 = l2 -&gt; next;
+        &#125;
+        return head;
+    &#125;
+&#125;;
+</code></pre>
+<h3 id="高精度计算"><a href="#高精度计算" class="headerlink" title="高精度计算"></a>高精度计算</h3><p>我们在上面入门学习了高精度加法，即模拟竖式计算，也通过字符串相加，两数相加等题目对其有了更深的理解。那其实，有<strong>高精度加法，当然也有高精度减法、高精度乘法、高精度除法</strong>，其实本质上都是在模拟我们竖式计算的过程。而这些高精度计算的方法，为我们计算大数提供了可行方式，今后我们也会逐渐地深入学习和了解。</p>
+<blockquote>
+<p>以上就是字符串相加、经典大数相加算法(高精度加法)入门的全部内容了，如果文章有什问题或者错误，或者有什么建议和想法，欢迎随时和我交流。</p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bistukk.github.io/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/10/07/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E5%A0%86%EF%BC%88%E5%90%91%E4%B8%8A%E8%B0%83%E6%95%B4%E6%B3%95-%E5%90%91%E4%B8%8B%E8%B0%83%E6%95%B4%E6%B3%95%E3%80%81%E5%BB%BA%E5%A0%86%E3%80%81%E5%A0%86%E6%8E%92%E5%BA%8F%E3%80%81TopK%E9%97%AE%E9%A2%98%EF%BC%89/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">数据结构——堆（向上调整法/向下调整法、建堆、堆排序、TopK问题）</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+    
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022-2023
+        <i class="ri-heart-fill heart_icon"></i> Capper
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="L I V E"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
