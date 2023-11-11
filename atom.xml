@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2023-10-18T05:34:51.096Z</updated>
+  <updated>2023-11-11T08:36:14.217Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>STL--vector容器(构造、遍历、插入删除、容量大小、数据存取、动态扩容等)</title>
+    <link href="https://bistukk.github.io/2023/11/11/STL-vector%E5%AE%B9%E5%99%A8/"/>
+    <id>https://bistukk.github.io/2023/11/11/STL-vector%E5%AE%B9%E5%99%A8/</id>
+    <published>2023-11-11T07:25:55.000Z</published>
+    <updated>2023-11-11T08:36:14.217Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;vector&quot;&gt;&lt;a href=&quot;#vector&quot; class=&quot;headerlink&quot; title=&quot;vector&quot;&gt;&lt;/a&gt;vector&lt;/h1&gt;&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;这几天在写代码的时候用到STL较多，也感受到了STL的强大，于是我重新温习了一遍STL的内容，并把一些基础的东西，重要的内容总结提炼出来，这篇是vector篇。C++的STL给我们提供了很多可用的容器，vector就是最常用的容器之一,vector应该掌握的基础内容包括构造函数、元素的插入插入删除、赋值、存取等操作。重点内容应该掌握vector的扩容机制、内存大小的变化原理等。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>如何将两个很大的数进行相加？</title>
