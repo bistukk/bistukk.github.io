@@ -238,4 +238,30 @@
 </blockquote>
 ]]></content>
   </entry>
+  <entry>
+    <title>vscode写markdown文件中的tab缩进错误显示问题</title>
+    <url>/2023/11/13/vscode%E5%86%99markdown%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84tab%E7%BC%A9%E8%BF%9B%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="用vscode写Markdown时tab键在网页上缩进错误问题"><a href="#用vscode写Markdown时tab键在网页上缩进错误问题" class="headerlink" title="用vscode写Markdown时tab键在网页上缩进错误问题"></a>用vscode写Markdown时tab键在网页上缩进错误问题</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p><strong>这两天在写博客时，遇到了一个奇怪的错误，就是在博客上传到网站上预览时，代码块中用tab键缩进的空格变成了8空格。我平时用vscode来编写博客，在本地渲染预览时没有问题，显示为4个空格，然而传到博客网站上时就变成8空格，有些奇怪。</strong>  </p>
+<p>博客网站上显示：  </p>
+<p><img src="https://s2.loli.net/2023/11/13/kj9Obl71K4of2Ct.png" alt="缩进问题.png"> </p>
+<span id="more"></span>  
+<p>本地预览：  </p>
+<p><img src="https://s2.loli.net/2023/11/13/lxBeuiwbzEYpC5h.png" alt="本地预览.png"> </p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>我一开始以为是我的tab-size设置有误，于是我检查了我的tab-size设置，发现并无问题，就是4个空格。<br><img src="https://s2.loli.net/2023/11/13/hgABoUy6LCNMt9W.png" alt="tab-size.png"> </p>
+<p>后来我想起之前在编辑微信公众号时使用的秀米排版编辑器遇到的问题，当时首行缩进不能直接用空格，否则会导致排版错误。于是我又检查了是否是因为自己误用空格或空行导致一些格式错误、渲染错误啥的，重新检查打了一遍后，发现网站上显示还是又有问题，看来并不是空格空行导致的。  </p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>最终通过查阅资料，解决了这个问题。<br>解决方案如下：  </p>
+<ul>
+<li>首先打开vscode的命令窗口（在vscode中用快捷键<strong>ctrl + shift + p</strong>）</li>
+<li>然后在命令窗口输入convert，会自动弹出下面这两个命令，我们选择<strong>Convert Indentation to Spaces</strong>将tab缩进转为空格命令。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/11/13/R1E8nv6CIQuM37Y.png" alt="tab缩进转为空格.png"></p>
+<ul>
+<li>然后我们在去博客网站上预览，发现成功变回4空格。</li>
+</ul>
+<p><img src="https://s2.loli.net/2023/11/13/QuPMOV54kwLiB6p.png" alt="tab问题解决后.png">  </p>
+<blockquote>
+<p>以上问题就成功解决了，成功上传显示无问题后还是挺开心的。</p>
+</blockquote>
+]]></content>
+  </entry>
 </search>
