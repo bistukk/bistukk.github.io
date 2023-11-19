@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2023-11-13T05:02:44.510Z</updated>
+  <updated>2023-11-19T03:25:01.636Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>因为山就在那里</title>
+    <link href="https://bistukk.github.io/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/"/>
+    <id>https://bistukk.github.io/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/</id>
+    <published>2023-11-18T14:57:33.000Z</published>
+    <updated>2023-11-19T03:25:01.636Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2023/11/18/zBw96x5uDZNenMX.jpg&quot;&gt;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>vscode写markdown文件中的tab缩进错误显示问题</title>
