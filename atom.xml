@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2023-11-30T15:10:32.982Z</updated>
+  <updated>2024-01-31T06:30:16.481Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>QT报错：ERROR: Unknown module(s) in QT: core5compat</title>
+    <link href="https://bistukk.github.io/2024/01/31/QT%E6%8A%A5%E9%94%99%EF%BC%9AERROR-Unknown-module-s-in-QT-core5compat/"/>
+    <id>https://bistukk.github.io/2024/01/31/QT%E6%8A%A5%E9%94%99%EF%BC%9AERROR-Unknown-module-s-in-QT-core5compat/</id>
+    <published>2024-01-31T05:44:05.000Z</published>
+    <updated>2024-01-31T06:30:16.481Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat&quot;&gt;&lt;a href=&quot;#Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat&quot; class=&quot;headerlink&quot; title=&quot;Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat&quot;&gt;&lt;/a&gt;Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat&lt;/h1&gt;&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;今天在github上下载了一些项目源码进行学习，但是当我用自己的QT Creator进行构建编译时，出现了报错：&lt;br&gt;&lt;img src=&quot;https://s2.loli.net/2024/01/31/gtyOW2aksq9dZzp.png&quot; alt=&quot;显示灰色.png&quot;&gt;&lt;br&gt;&lt;img src=&quot;https://s2.loli.net/2024/01/31/BURAG4cM17JVlsu.png&quot; alt=&quot;报错信息.png&quot;&gt;  &lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>2023年最后一个月了，当初的愿望实现了吗？</title>
@@ -33,27 +48,11 @@
   </entry>
   
   <entry>
-    <title>因为山就在那里</title>
-    <link href="https://bistukk.github.io/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/"/>
-    <id>https://bistukk.github.io/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/</id>
-    <published>2023-11-18T14:57:33.000Z</published>
-    <updated>2023-11-19T03:37:03.913Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2023/11/18/zBw96x5uDZNenMX.jpg&quot;&gt; &lt;/p&gt;
-&lt;p&gt;第一次爬北京的山，看到了不一样的风景，也收获到了意外的体验。虽说是3A级景区，但这次给我的体验远不止3A，恰巧赶上了日落，路上遇到了小猫，2000多米的爬山体验，给我的感觉是，棒极了。  &lt;/p&gt;</summary>
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>vscode写markdown文件中的tab缩进错误显示问题</title>
     <link href="https://bistukk.github.io/2023/11/13/vscode%E5%86%99markdown%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84tab%E7%BC%A9%E8%BF%9B%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/"/>
     <id>https://bistukk.github.io/2023/11/13/vscode%E5%86%99markdown%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84tab%E7%BC%A9%E8%BF%9B%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/</id>
     <published>2023-11-13T02:04:50.000Z</published>
-    <updated>2023-11-13T05:02:44.510Z</updated>
+    <updated>2023-11-13T06:24:04.584Z</updated>
     
     
     <summary type="html">&lt;h1 id=&quot;用vscode写Markdown时tab键在网页上缩进错误问题&quot;&gt;&lt;a href=&quot;#用vscode写Markdown时tab键在网页上缩进错误问题&quot; class=&quot;headerlink&quot; title=&quot;用vscode写Markdown时tab键在网页上缩进错误问题&quot;&gt;&lt;/a&gt;用vscode写Markdown时tab键在网页上缩进错误问题&lt;/h1&gt;&lt;h2 id=&quot;问题描述&quot;&gt;&lt;a href=&quot;#问题描述&quot; class=&quot;headerlink&quot; title=&quot;问题描述&quot;&gt;&lt;/a&gt;问题描述&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;这两天在写博客时，遇到了一个奇怪的错误，就是在博客上传到网站上预览时，代码块中用tab键缩进的空格变成了8空格。我平时用vscode来编写博客，在本地渲染预览时没有问题，显示为4个空格，然而传到博客网站上时就变成8空格，有些奇怪。&lt;/strong&gt;  &lt;/p&gt;
