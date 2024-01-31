@@ -142,6 +142,12 @@
 ]]></content>
   </entry>
   <entry>
+    <title>first</title>
+    <url>/2022/10/09/first/</url>
+    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2022/10/09/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -157,12 +163,6 @@
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>first</title>
-    <url>/2022/10/09/first/</url>
-    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
 ]]></content>
   </entry>
   <entry>
@@ -204,39 +204,6 @@
 <p><img src="https://s2.loli.net/2023/11/13/QuPMOV54kwLiB6p.png" alt="tab问题解决后.png">  </p>
 <blockquote>
 <p>以上问题就成功解决了，成功上传显示无问题后还是挺开心的。</p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title>如何将两个很大的数进行相加？</title>
-    <url>/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="经典大数相加算法、高精度加法"><a href="#经典大数相加算法、高精度加法" class="headerlink" title="经典大数相加算法、高精度加法"></a>经典大数相加算法、高精度加法</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>先上一道题</strong>：<a href="https://leetcode.cn/problems/add-strings/"><strong>LC415.字符串相加</strong></a>     </p>
-<p>给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。</p>
-<hr>
-<p>对于这道题，可能很多朋友会想到将两个字符转为数字，然后将其进行相加，最后将结果再转为字符串。这种方式可行，但是如果数字非常大呢？大到连long long 都不够加呢?那我们就得请出我们的主角：<strong>高精度加法</strong>。  </p>
-<span id="more"></span>
-<h2 id="高精度加法是什么？"><a href="#高精度加法是什么？" class="headerlink" title="高精度加法是什么？"></a>高精度加法是什么？</h2><p>百科上的定义：高精度加法是信息学的一种重要算法。这种算法使用多个存储单位进行计算，因此它的计算范围超过一般使用一个存储单位的算法。所谓高精度加法，其实就是<strong>竖式加法</strong>，竖式加法我们在小学2年半的时候都学过，例如我要实现114 + 514，那就是：<br><img src="https://s2.loli.net/2023/10/18/2DF5GTCgQUMhOHW.png" alt="竖式加法.jpg">   </p>
-<p>如上图所示，我们从个位开始相加，4 + 4 &#x3D; 8，然后到十位，1 + 1 &#x3D; 2，接着到百位，1 + 5 &#x3D; 6，所得结果就是628。所示例子没有进位，如果有进位的话，需要加上进位值。如9 + 3，需要进1，本位是2。</p>
-<h2 id="为什么需要高精度加法？"><a href="#为什么需要高精度加法？" class="headerlink" title="为什么需要高精度加法？"></a>为什么需要高精度加法？</h2><p>高精度加法原来就是所谓的竖式相加，这不是小学生都会吗？其实，高精度加法在计算机算法中有着重要的应用。我们知道,在C&#x2F;C++语言中，通常来说（32位机器）,<strong>int、long类型占32位，long long类型占64位，而最大的类型unsigned long long能表示的最大数也就才(1e19+8e18)</strong> ，如果要几百位的数来进行相加，那就不行了，所以，我们就可以使用高精度来计算，高精度一般也会用来处理大数相加的问题。</p>
-<h2 id="高精度加法实现（C-）"><a href="#高精度加法实现（C-）" class="headerlink" title="高精度加法实现（C++）"></a>高精度加法实现（C++）</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将两个大数采用字符串的形式输入，然后模拟竖式加法的过程，<strong>用两个指针，先从个位开始相加（即字符串的最后一位），我们定义一个变量add来存进位值（如果没有进位则为0），然后逐步往高位移动，继续相加。考虑到两个数位数会有不一样的情况，有一个先加完，一个后加完，那我们采取将先加完的数的剩余位默认补0的方式即可</strong>，具体代码实现如下。</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">addStrings</span><span class="params">(string num1, string num2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//从个位开始相加，初始化进位add为0</span></span><br><span class="line">        <span class="type">int</span> i = num1.<span class="built_in">length</span>() - <span class="number">1</span>, j = num2.<span class="built_in">length</span>() - <span class="number">1</span>, add = <span class="number">0</span>;</span><br><span class="line">        string ans = <span class="string">&quot;&quot;</span>;<span class="comment">//定义一个空字符串来拼接答案</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//当其中一个数没加完或者进位大于0时执行循环</span></span><br><span class="line">        <span class="keyword">while</span>(i &gt;= <span class="number">0</span> || j &gt;= <span class="number">0</span> || add &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//当前位数没有加完则为本身，加完的话则默认为补的0</span></span><br><span class="line">            <span class="type">int</span> x = i &gt;= <span class="number">0</span> ? num1[i] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> y = j &gt;= <span class="number">0</span> ? num2[j] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> result = x + y + add;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//将当前位的值加入ans</span></span><br><span class="line">            ans.<span class="built_in">push_back</span>(<span class="string">&#x27;0&#x27;</span> + result % <span class="number">10</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//更新进位值</span></span><br><span class="line">            add = result / <span class="number">10</span>;</span><br><span class="line">            i--;</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//由于每一位插入时是尾插导致低位在前，翻转一下即可</span></span><br><span class="line">        <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(), ans.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>时间复杂度：O(max(len1, len2))，其中len1和len2分别为两字符串的长度。  </li>
-<li>空间复杂度：O(1)，我们只需要常数空间来存储若干变量。</li>
-</ul>
-<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p><a href="https://leetcode.cn/problems/add-binary/"><strong>LC67.二进制求和</strong></a>    </p>
-<p><a href="https://leetcode.cn/problems/add-two-numbers/"><strong>LC2.两数相加</strong></a>    </p>
-<p><a href="https://leetcode.cn/problems/add-two-numbers-ii/description/"><strong>LC445.两数相加II</strong></a>    </p>
-<hr>
-<p>这里我们研究一下两数相加这题，题目如下：  </p>
-<p><strong>LC2.两数相加</strong><br>给你两个非空的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个节点只能存储一位数字。<br>请你将两个数相加，并以相同形式返回一个表示和的链表。<br>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。<br><img src="https://s2.loli.net/2023/10/18/OfD6LoA2caST81m.png" alt="add-two.png"></p>
-<h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>如果仔细看完高精度加法的内容的话，会发现，这也不还是相当于模拟加法的过程吗?只是存储形式从字符串变为了链表而已。我们先<strong>把两链表头看成最低位即个位，开始进行相加，同样我们也用一个变量add来存储进位值，接着进行下一个节点的相加，一直到链表为空,同样也是会有一个链表先走完的情况，那我们将先走完的剩下的空位补0即可</strong>。</p>
-<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">addTwoNumbers</span><span class="params">(ListNode* l1, ListNode* l2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建头指针和尾指针</span></span><br><span class="line">        ListNode* head = <span class="literal">nullptr</span>, *tail = <span class="literal">nullptr</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//定义变量表示进位值，初始化为0</span></span><br><span class="line">        <span class="type">int</span> add = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">//当其中一个链表不为空时或者进位值不为0时进行循环</span></span><br><span class="line">        <span class="keyword">while</span>(l1 || l2 || add &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="type">int</span> x = l1 ? l1 -&gt; val : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> y = l2 ? l2 -&gt; val : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> sum = x + y + add;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//创建一个节点来存储相加后当前位的值</span></span><br><span class="line">            ListNode* tmp = <span class="keyword">new</span> <span class="built_in">ListNode</span>(sum % <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span>(!head)&#123;</span><br><span class="line">                head = tail = tmp;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                tail -&gt; next = tmp;</span><br><span class="line">                tail = tail -&gt; next;<span class="comment">//更新tail</span></span><br><span class="line">            &#125;</span><br><span class="line">            add = sum / <span class="number">10</span>;<span class="comment">//更新进位值</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//迭代往下走</span></span><br><span class="line">            <span class="keyword">if</span>(l1) l1 = l1 -&gt; next;</span><br><span class="line">            <span class="keyword">if</span>(l2) l2 = l2 -&gt; next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="高精度计算"><a href="#高精度计算" class="headerlink" title="高精度计算"></a>高精度计算</h3><p>我们在上面入门学习了高精度加法，即模拟竖式计算，也通过字符串相加，两数相加等题目对其有了更深的理解。那其实，有<strong>高精度加法，当然也有高精度减法、高精度乘法、高精度除法</strong>，其实本质上都是在模拟我们竖式计算的过程。而这些高精度计算的方法，为我们计算大数提供了可行方式，今后我们也会逐渐地深入学习和了解。</p>
-<blockquote>
-<p>以上就是字符串相加、经典大数相加算法(高精度加法)入门的全部内容了，如果文章有什问题或者错误，或者有什么建议和想法，欢迎随时和我交流。</p>
 </blockquote>
 ]]></content>
   </entry>
@@ -301,6 +268,39 @@
 </blockquote>
 </li>
 </ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>如何将两个很大的数进行相加？</title>
+    <url>/2023/10/18/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%8A%A0%EF%BC%88%E7%BB%8F%E5%85%B8%E5%A4%A7%E6%95%B0%E7%9B%B8%E5%8A%A0%E7%AE%97%E6%B3%95%E3%80%81%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="经典大数相加算法、高精度加法"><a href="#经典大数相加算法、高精度加法" class="headerlink" title="经典大数相加算法、高精度加法"></a>经典大数相加算法、高精度加法</h1><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>先上一道题</strong>：<a href="https://leetcode.cn/problems/add-strings/"><strong>LC415.字符串相加</strong></a>     </p>
+<p>给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和并同样以字符串形式返回。你不能使用任何內建的用于处理大整数的库（比如 BigInteger）， 也不能直接将输入的字符串转换为整数形式。</p>
+<hr>
+<p>对于这道题，可能很多朋友会想到将两个字符转为数字，然后将其进行相加，最后将结果再转为字符串。这种方式可行，但是如果数字非常大呢？大到连long long 都不够加呢?那我们就得请出我们的主角：<strong>高精度加法</strong>。  </p>
+<span id="more"></span>
+<h2 id="高精度加法是什么？"><a href="#高精度加法是什么？" class="headerlink" title="高精度加法是什么？"></a>高精度加法是什么？</h2><p>百科上的定义：高精度加法是信息学的一种重要算法。这种算法使用多个存储单位进行计算，因此它的计算范围超过一般使用一个存储单位的算法。所谓高精度加法，其实就是<strong>竖式加法</strong>，竖式加法我们在小学2年半的时候都学过，例如我要实现114 + 514，那就是：<br><img src="https://s2.loli.net/2023/10/18/2DF5GTCgQUMhOHW.png" alt="竖式加法.jpg">   </p>
+<p>如上图所示，我们从个位开始相加，4 + 4 &#x3D; 8，然后到十位，1 + 1 &#x3D; 2，接着到百位，1 + 5 &#x3D; 6，所得结果就是628。所示例子没有进位，如果有进位的话，需要加上进位值。如9 + 3，需要进1，本位是2。</p>
+<h2 id="为什么需要高精度加法？"><a href="#为什么需要高精度加法？" class="headerlink" title="为什么需要高精度加法？"></a>为什么需要高精度加法？</h2><p>高精度加法原来就是所谓的竖式相加，这不是小学生都会吗？其实，高精度加法在计算机算法中有着重要的应用。我们知道,在C&#x2F;C++语言中，通常来说（32位机器）,<strong>int、long类型占32位，long long类型占64位，而最大的类型unsigned long long能表示的最大数也就才(1e19+8e18)</strong> ，如果要几百位的数来进行相加，那就不行了，所以，我们就可以使用高精度来计算，高精度一般也会用来处理大数相加的问题。</p>
+<h2 id="高精度加法实现（C-）"><a href="#高精度加法实现（C-）" class="headerlink" title="高精度加法实现（C++）"></a>高精度加法实现（C++）</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将两个大数采用字符串的形式输入，然后模拟竖式加法的过程，<strong>用两个指针，先从个位开始相加（即字符串的最后一位），我们定义一个变量add来存进位值（如果没有进位则为0），然后逐步往高位移动，继续相加。考虑到两个数位数会有不一样的情况，有一个先加完，一个后加完，那我们采取将先加完的数的剩余位默认补0的方式即可</strong>，具体代码实现如下。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">string <span class="title">addStrings</span><span class="params">(string num1, string num2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//从个位开始相加，初始化进位add为0</span></span><br><span class="line">        <span class="type">int</span> i = num1.<span class="built_in">length</span>() - <span class="number">1</span>, j = num2.<span class="built_in">length</span>() - <span class="number">1</span>, add = <span class="number">0</span>;</span><br><span class="line">        string ans = <span class="string">&quot;&quot;</span>;<span class="comment">//定义一个空字符串来拼接答案</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//当其中一个数没加完或者进位大于0时执行循环</span></span><br><span class="line">        <span class="keyword">while</span>(i &gt;= <span class="number">0</span> || j &gt;= <span class="number">0</span> || add &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//当前位数没有加完则为本身，加完的话则默认为补的0</span></span><br><span class="line">            <span class="type">int</span> x = i &gt;= <span class="number">0</span> ? num1[i] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> y = j &gt;= <span class="number">0</span> ? num2[j] - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> result = x + y + add;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//将当前位的值加入ans</span></span><br><span class="line">            ans.<span class="built_in">push_back</span>(<span class="string">&#x27;0&#x27;</span> + result % <span class="number">10</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//更新进位值</span></span><br><span class="line">            add = result / <span class="number">10</span>;</span><br><span class="line">            i--;</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//由于每一位插入时是尾插导致低位在前，翻转一下即可</span></span><br><span class="line">        <span class="built_in">reverse</span>(ans.<span class="built_in">begin</span>(), ans.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>时间复杂度：O(max(len1, len2))，其中len1和len2分别为两字符串的长度。  </li>
+<li>空间复杂度：O(1)，我们只需要常数空间来存储若干变量。</li>
+</ul>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><p><a href="https://leetcode.cn/problems/add-binary/"><strong>LC67.二进制求和</strong></a>    </p>
+<p><a href="https://leetcode.cn/problems/add-two-numbers/"><strong>LC2.两数相加</strong></a>    </p>
+<p><a href="https://leetcode.cn/problems/add-two-numbers-ii/description/"><strong>LC445.两数相加II</strong></a>    </p>
+<hr>
+<p>这里我们研究一下两数相加这题，题目如下：  </p>
+<p><strong>LC2.两数相加</strong><br>给你两个非空的链表，表示两个非负的整数。它们每位数字都是按照逆序的方式存储的，并且每个节点只能存储一位数字。<br>请你将两个数相加，并以相同形式返回一个表示和的链表。<br>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。<br><img src="https://s2.loli.net/2023/10/18/OfD6LoA2caST81m.png" alt="add-two.png"></p>
+<h4 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析"></a>思路分析</h4><p>如果仔细看完高精度加法的内容的话，会发现，这也不还是相当于模拟加法的过程吗?只是存储形式从字符串变为了链表而已。我们先<strong>把两链表头看成最低位即个位，开始进行相加，同样我们也用一个变量add来存储进位值，接着进行下一个节点的相加，一直到链表为空,同样也是会有一个链表先走完的情况，那我们将先走完的剩下的空位补0即可</strong>。</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">addTwoNumbers</span><span class="params">(ListNode* l1, ListNode* l2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建头指针和尾指针</span></span><br><span class="line">        ListNode* head = <span class="literal">nullptr</span>, *tail = <span class="literal">nullptr</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//定义变量表示进位值，初始化为0</span></span><br><span class="line">        <span class="type">int</span> add = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">//当其中一个链表不为空时或者进位值不为0时进行循环</span></span><br><span class="line">        <span class="keyword">while</span>(l1 || l2 || add &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="type">int</span> x = l1 ? l1 -&gt; val : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> y = l2 ? l2 -&gt; val : <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> sum = x + y + add;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//创建一个节点来存储相加后当前位的值</span></span><br><span class="line">            ListNode* tmp = <span class="keyword">new</span> <span class="built_in">ListNode</span>(sum % <span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span>(!head)&#123;</span><br><span class="line">                head = tail = tmp;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                tail -&gt; next = tmp;</span><br><span class="line">                tail = tail -&gt; next;<span class="comment">//更新tail</span></span><br><span class="line">            &#125;</span><br><span class="line">            add = sum / <span class="number">10</span>;<span class="comment">//更新进位值</span></span><br><span class="line">            </span><br><span class="line">            <span class="comment">//迭代往下走</span></span><br><span class="line">            <span class="keyword">if</span>(l1) l1 = l1 -&gt; next;</span><br><span class="line">            <span class="keyword">if</span>(l2) l2 = l2 -&gt; next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="高精度计算"><a href="#高精度计算" class="headerlink" title="高精度计算"></a>高精度计算</h3><p>我们在上面入门学习了高精度加法，即模拟竖式计算，也通过字符串相加，两数相加等题目对其有了更深的理解。那其实，有<strong>高精度加法，当然也有高精度减法、高精度乘法、高精度除法</strong>，其实本质上都是在模拟我们竖式计算的过程。而这些高精度计算的方法，为我们计算大数提供了可行方式，今后我们也会逐渐地深入学习和了解。</p>
+<blockquote>
+<p>以上就是字符串相加、经典大数相加算法(高精度加法)入门的全部内容了，如果文章有什问题或者错误，或者有什么建议和想法，欢迎随时和我交流。</p>
+</blockquote>
 ]]></content>
   </entry>
   <entry>
