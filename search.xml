@@ -38,55 +38,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>QT报错：ERROR: Unknown module(s) in QT: core5compat</title>
-    <url>/2024/01/31/QT%E6%8A%A5%E9%94%99%EF%BC%9AERROR-Unknown-module-s-in-QT-core5compat/</url>
-    <content><![CDATA[<h1 id="Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat"><a href="#Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat" class="headerlink" title="Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat"></a>Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>今天在github上下载了一些项目源码进行学习，但是当我用自己的QT Creator进行构建编译时，出现了报错：<br><img src="https://s2.loli.net/2024/01/31/gtyOW2aksq9dZzp.png" alt="显示灰色.png"><br><img src="https://s2.loli.net/2024/01/31/BURAG4cM17JVlsu.png" alt="报错信息.png">  </p>
-<span id="more"></span>  
-<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>根据报错信息，显示不知道的模块：core5compat，应该是自己的QT中缺少了环境名为：core5compat的模块。<br>经过查询后得知，自己的Qt版本是Qt 6，是Qt框架的最新主要版本，相比于Qt 5，它提供了许多改进和新特性，但也移除了一些旧特性和类。core5compat 模块：为了帮助开发者从Qt 5迁移到Qt 6，Qt 6提供了一个名为 core5compat 的兼容性模块。这个模块包含了一些在Qt 6中被弃用但在Qt 5中常用的类和方法。错误消息 “Unknown module(s) in QT: core5compat” 指的是在尝试编译或运行一个使用Qt框架的项目时，Qt环境中缺少名为 core5compat 的模块。这通常出现在尝试将基于Qt 5的代码迁移到Qt 6时，因为Qt 6中移除或更改了一些在Qt 5中存在的功能。</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ul>
-<li>首先检查自己项目构建时用的QT版本，一般在打开.pro文件时即可选择，<strong>如下图，我这里是用的Qt6.2.4，项目版本得看这个，不要看help中的about，那个不一定是本项目所用的</strong><br><img src="https://s2.loli.net/2024/01/31/xryFA9zZMjwTJ2R.png" alt="项目构建版本.png"></li>
-<li>接着打开并运行<strong>Qt Maintenance Tool。通常可以在安装Qt的文件夹中找到它</strong>，在Qt Maintenance Tool中，执行以下操作：</li>
-</ul>
-<ol>
-<li>选择“添加或删除组件”（Add or Remove Components）。</li>
-<li>展开已安装的Qt版本，例如我这的 Qt 6.2.4。</li>
-<li>寻找名为“Qt 5 Compatibility Module”或类似名称的组件，它就是 core5compat 模块。</li>
-<li>选中该组件，然后点击“下一步”（Next）来开始安装。</li>
-<li>等待安装完成后，关闭Qt Maintenance Tool。<br><img src="https://s2.loli.net/2024/01/31/EFicJb4kaUw7DpL.png" alt="Qt Maintenance Tool.png"></li>
-</ol>
-<ul>
-<li><p>然后更新项目文件，打开项目文件（通常是一个以 .pro 结尾的文件），并确保包含了core5compat模块。<strong>如果文件中没有“QT +&#x3D; core5compat”这行代码的话，还需要在.pro文件中添加：<br>QT +&#x3D; core5compat，这会告诉Qt构建系统您的项目依赖于core5compat模块。</strong></p>
-</li>
-<li><p>最后重新打开并编译项目，可以clean然后rebuild，即可正常运行<br><img src="https://s2.loli.net/2024/01/31/CwOEmnJkSBILR6y.png" alt="成功运行.png"></p>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>first</title>
-    <url>/2022/10/09/first/</url>
-    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/10/09/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>STL--vector容器(构造、遍历、插入删除、容量大小、数据存取、动态扩容等)</title>
     <url>/2023/11/11/STL-vector%E5%AE%B9%E5%99%A8/</url>
     <content><![CDATA[<h1 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h1><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天在写代码的时候用到STL较多，也感受到了STL的强大，于是我重新温习了一遍STL的内容，并把一些基础的东西，重要的内容总结提炼出来，这篇是vector篇。C++的STL给我们提供了很多可用的容器，vector就是最常用的容器之一,vector应该掌握的基础内容包括构造函数、元素的插入插入删除、赋值、存取等操作。重点内容应该掌握vector的扩容机制、内存大小的变化原理等。</p>
@@ -163,6 +114,55 @@
 <blockquote>
 <p>以上就是关于vector容器常见操作和原理的全部内容了，如果文章有什么错误或者遇到什么问题，欢迎随时和我交流联系。</p>
 </blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>first</title>
+    <url>/2022/10/09/first/</url>
+    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>QT报错：ERROR: Unknown module(s) in QT: core5compat</title>
+    <url>/2024/01/31/QT%E6%8A%A5%E9%94%99%EF%BC%9AERROR-Unknown-module-s-in-QT-core5compat/</url>
+    <content><![CDATA[<h1 id="Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat"><a href="#Qt报错：error-Project-ERROR-Unknown-module-s-in-QT-core5compat" class="headerlink" title="Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat"></a>Qt报错：error: Project ERROR: Unknown module(s) in QT: core5compat</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>今天在github上下载了一些项目源码进行学习，但是当我用自己的QT Creator进行构建编译时，出现了报错：<br><img src="https://s2.loli.net/2024/01/31/gtyOW2aksq9dZzp.png" alt="显示灰色.png"><br><img src="https://s2.loli.net/2024/01/31/BURAG4cM17JVlsu.png" alt="报错信息.png">  </p>
+<span id="more"></span>  
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>根据报错信息，显示不知道的模块：core5compat，应该是自己的QT中缺少了环境名为：core5compat的模块。<br>经过查询后得知，自己的Qt版本是Qt 6，是Qt框架的最新主要版本，相比于Qt 5，它提供了许多改进和新特性，但也移除了一些旧特性和类。core5compat 模块：为了帮助开发者从Qt 5迁移到Qt 6，Qt 6提供了一个名为 core5compat 的兼容性模块。这个模块包含了一些在Qt 6中被弃用但在Qt 5中常用的类和方法。错误消息 “Unknown module(s) in QT: core5compat” 指的是在尝试编译或运行一个使用Qt框架的项目时，Qt环境中缺少名为 core5compat 的模块。这通常出现在尝试将基于Qt 5的代码迁移到Qt 6时，因为Qt 6中移除或更改了一些在Qt 5中存在的功能。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><ul>
+<li>首先检查自己项目构建时用的QT版本，一般在打开.pro文件时即可选择，<strong>如下图，我这里是用的Qt6.2.4，项目版本得看这个，不要看help中的about，那个不一定是本项目所用的</strong><br><img src="https://s2.loli.net/2024/01/31/xryFA9zZMjwTJ2R.png" alt="项目构建版本.png"></li>
+<li>接着打开并运行<strong>Qt Maintenance Tool。通常可以在安装Qt的文件夹中找到它</strong>，在Qt Maintenance Tool中，执行以下操作：</li>
+</ul>
+<ol>
+<li>选择“添加或删除组件”（Add or Remove Components）。</li>
+<li>展开已安装的Qt版本，例如我这的 Qt 6.2.4。</li>
+<li>寻找名为“Qt 5 Compatibility Module”或类似名称的组件，它就是 core5compat 模块。</li>
+<li>选中该组件，然后点击“下一步”（Next）来开始安装。</li>
+<li>等待安装完成后，关闭Qt Maintenance Tool。<br><img src="https://s2.loli.net/2024/01/31/EFicJb4kaUw7DpL.png" alt="Qt Maintenance Tool.png"></li>
+</ol>
+<ul>
+<li><p>然后更新项目文件，打开项目文件（通常是一个以 .pro 结尾的文件），并确保包含了core5compat模块。<strong>如果文件中没有“QT +&#x3D; core5compat”这行代码的话，还需要在.pro文件中添加：<br>QT +&#x3D; core5compat，这会告诉Qt构建系统您的项目依赖于core5compat模块。</strong></p>
+</li>
+<li><p>最后重新打开并编译项目，可以clean然后rebuild，即可正常运行<br><img src="https://s2.loli.net/2024/01/31/CwOEmnJkSBILR6y.png" alt="成功运行.png"></p>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/10/09/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
   </entry>
   <entry>
