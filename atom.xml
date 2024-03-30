@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2024-02-09T17:52:01.921Z</updated>
+  <updated>2024-03-30T02:33:01.841Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git学习与实践（入门）</title>
+    <link href="https://bistukk.github.io/2024/03/30/git%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%85%A5%E9%97%A8%EF%BC%89/"/>
+    <id>https://bistukk.github.io/2024/03/30/git%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%85%A5%E9%97%A8%EF%BC%89/</id>
+    <published>2024-03-30T02:24:54.000Z</published>
+    <updated>2024-03-30T02:33:01.841Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;git学习与实践（入门）&quot;&gt;&lt;a href=&quot;#git学习与实践（入门）&quot; class=&quot;headerlink&quot; title=&quot;git学习与实践（入门）&quot;&gt;&lt;/a&gt;git学习与实践（入门）&lt;/h1&gt;&lt;h2 id=&quot;一、git介绍&quot;&gt;&lt;a href=&quot;#一、git介绍&quot; class=&quot;headerlink&quot; title=&quot;一、git介绍&quot;&gt;&lt;/a&gt;一、git介绍&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;什么是git?&lt;/strong&gt;&lt;br&gt;Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.&lt;br&gt;&lt;img src=&quot;https://s2.loli.net/2024/03/30/1nQkwjTGWZaVMIo.png&quot; alt=&quot;git.png&quot;&gt;&lt;br&gt;这是Git官网的介绍，Git 是一个免费的开源分布式版本控制系统，旨在快速高效地处理从小到大的项目。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>我与旧事归于尽，来年依旧迎花开 ——启2024</title>
