@@ -527,7 +527,7 @@
   </entry>
   <entry>
     <title>设计和使用Qt Designer Widget插件时遇到的问题记录及解决方案</title>
-    <url>/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
+    <url>/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
     <content><![CDATA[<p><img src="https://s2.loli.net/2024/04/05/H1euUO5VXyZgMqR.png" alt="自定义插件"><br>最近在学习Qt中的自定义插件和库，然后在设计和使用Qt Desiger Widget插件时，发现无法找到我自己设计的Widget插件，于是分析和查询了一番，又发现了好多问题，最后一步一步分析与查询，最终成功解决了问题，成功使用自己的自定义插件，在这过程中也对一些构建配置、链接库有了更深的理解。</p>
 <span id="more"></span>
 <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Qt自定义的widget插件无法在Designer中显示<br><img src="https://s2.loli.net/2024/04/05/tsF7wNa5ufIni8x.png" alt="没有显示.png"><br>首先检查自己项目文件夹中release版本，发现里面只有.dll文件而没有.lib文件，于是我怀疑是不是构建配置的环境有问题，<strong>查寻帮助文档以及一些提示，发现Qt自带默认的编译器是 MinGW，Windows 平台 Qt Creator 是由 Visual Studio 编译生成的程序（MSVC编译）</strong>，两个编译器不一样，这样在就导致在Qt Designer无法加载出来自定义好的插件。<br>那么如何才能在Qt Creator中使用自定义的插件呢？目前得知两种方法：</p>
