@@ -6,7 +6,7 @@
   <link href="https://bistukk.github.io/atom.xml" rel="self"/>
   
   <link href="https://bistukk.github.io/"/>
-  <updated>2024-03-30T02:33:01.841Z</updated>
+  <updated>2024-04-05T08:48:38.250Z</updated>
   <id>https://bistukk.github.io/</id>
   
   <author>
@@ -15,6 +15,21 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计和使用Qt Designer Widget插件时遇到的问题记录及解决方案</title>
+    <link href="https://bistukk.github.io/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"/>
+    <id>https://bistukk.github.io/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</id>
+    <published>2024-04-05T06:16:57.000Z</published>
+    <updated>2024-04-05T08:48:38.250Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://s2.loli.net/2024/04/05/H1euUO5VXyZgMqR.png&quot; alt=&quot;自定义插件&quot;&gt;&lt;br&gt;最近在学习Qt中的自定义插件和库，然后在设计和使用Qt Desiger Widget插件时，发现无法找到我自己设计的Widget插件，于是分析和查询了一番，又发现了好多问题，最后一步一步分析与查询，最终成功解决了问题，成功使用自己的自定义插件，在这过程中也对一些构建配置、链接库有了更深的理解。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>git学习与实践（入门）</title>

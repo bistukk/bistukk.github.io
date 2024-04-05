@@ -63,12 +63,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>first</title>
-    <url>/2022/10/09/first/</url>
-    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
-]]></content>
-  </entry>
-  <entry>
     <title>STL--vector容器(构造、遍历、插入删除、容量大小、数据存取、动态扩容等)</title>
     <url>/2023/11/11/STL-vector%E5%AE%B9%E5%99%A8/</url>
     <content><![CDATA[<h1 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h1><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这几天在写代码的时候用到STL较多，也感受到了STL的强大，于是我重新温习了一遍STL的内容，并把一些基础的东西，重要的内容总结提炼出来，这篇是vector篇。C++的STL给我们提供了很多可用的容器，vector就是最常用的容器之一,vector应该掌握的基础内容包括构造函数、元素的插入插入删除、赋值、存取等操作。重点内容应该掌握vector的扩容机制、内存大小的变化原理等。</p>
@@ -148,6 +142,30 @@
 ]]></content>
   </entry>
   <entry>
+    <title>first</title>
+    <url>/2022/10/09/first/</url>
+    <content><![CDATA[<p>不要强求不可知，要从已知推未知。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/10/09/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>git学习与实践（入门）</title>
     <url>/2024/03/30/git%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%9E%E8%B7%B5%EF%BC%88%E5%85%A5%E9%97%A8%EF%BC%89/</url>
     <content><![CDATA[<h1 id="git学习与实践（入门）"><a href="#git学习与实践（入门）" class="headerlink" title="git学习与实践（入门）"></a>git学习与实践（入门）</h1><h2 id="一、git介绍"><a href="#一、git介绍" class="headerlink" title="一、git介绍"></a>一、git介绍</h2><p><strong>什么是git?</strong><br>Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.<br><img src="https://s2.loli.net/2024/03/30/1nQkwjTGWZaVMIo.png" alt="git.png"><br>这是Git官网的介绍，Git 是一个免费的开源分布式版本控制系统，旨在快速高效地处理从小到大的项目。</p>
@@ -170,7 +188,7 @@
 </li>
 </ul>
 <blockquote>
-<p>git config –global user.email “<a href="mailto:&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#x65;&#120;&#x61;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;">&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#x65;&#120;&#x61;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;</a>“</p>
+<p>git config –global user.email “<a href="mailto:&#101;&#x6d;&#x61;&#105;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#x6f;&#109;">&#101;&#x6d;&#x61;&#105;&#x6c;&#x40;&#x65;&#x78;&#x61;&#x6d;&#112;&#108;&#x65;&#46;&#x63;&#x6f;&#109;</a>“</p>
 </blockquote>
 <h3 id="1、简单例子"><a href="#1、简单例子" class="headerlink" title="1、简单例子"></a>1、简单例子</h3><p>其实最基础也是最重要的指令也就那几条，我们可以通过一个例子完成：<br><strong>将本地的一个txt文件上传到远程仓库</strong><br>（1）在代码托管平台创建一个仓库（以Github为例）, 登录GitHub，点击页面右上角的加号图标，选择“New repository”创建一个新的仓库，并按照提示填写相关信息。  </p>
 <p>（2）在一个目录下创建一个Git版本库（仓库）,这将把当前目录变为Git可以管理的仓库</p>
@@ -289,24 +307,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/10/09/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>photos</title>
     <url>/2022/10/15/photos/</url>
     <content><![CDATA[]]></content>
@@ -347,6 +347,40 @@
 <p>以上问题就成功解决了，成功上传显示无问题后还是挺开心的。</p>
 </blockquote>
 ]]></content>
+  </entry>
+  <entry>
+    <title>因为山就在那里</title>
+    <url>/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/</url>
+    <content><![CDATA[<p><img src="https://s2.loli.net/2023/11/18/zBw96x5uDZNenMX.jpg"> </p>
+<p>第一次爬北京的山，看到了不一样的风景，也收获到了意外的体验。虽说是3A级景区，但这次给我的体验远不止3A，恰巧赶上了日落，路上遇到了小猫，2000多米的爬山体验，给我的感觉是，棒极了。  </p>
+<span id="more"></span> 
+<hr>
+<h3 id="千里之行，始于足下"><a href="#千里之行，始于足下" class="headerlink" title="千里之行，始于足下"></a>千里之行，始于足下</h3><p>也许是最近在学校待久了吧，课堂上一些公式化的学习生活有时让人觉得些许枯燥，刚好最近特别想去爬山，想去那就去呗！于是乎，我咨询了一下经常在北京各大山区骑行游览的同学，他随手推荐了离学校不远的蟒山。我上地图搜了一下，在网上简略地看了一下攻略，就决定出发了。没想到的是，另外有两位同学也打算出去走走，我说，那就一起呗，反正也不远。就这样，我收获了两个小伙伴。出发前，我东西收拾得差不多了，但我依然还在想是不要再准备些什么？思索了一下，我觉得不用再考虑太多了，千里之行，始于足下，想做就直接去做先，直接行动起来！  </p>
+<hr>
+<h3 id="山路崎岖，拥抱自然"><a href="#山路崎岖，拥抱自然" class="headerlink" title="山路崎岖，拥抱自然"></a>山路崎岖，拥抱自然</h3><p>在到达正式爬山之前，其实还是经历了许多的小插曲。当天我们三人是坐地铁到达关东站，然后骑着共享单车去到蟒山国家森林公园的入口。但是骑到一半突然觉出似乎山区附近没有停车点，于是本来已经快到山脚下的我们决定原路返回一段距离去最近的停车点。好在最近停车点不远，也没有迂回多少。之后我们开始等公交，可等了一会儿也没见车来，我索性提出直接打车，然后刚打车就有师傅接单了，发现路费也不贵，其实也就10来分钟的路程，不过上山有点坡度，所以骑车可能会久些。就这样我们来到了入口。检完票进去后就面临路线的选择，我想着先从山脚走起吧，就先往文化广场的方向走去。蟒山森林公园其实好多小景点都别有一番风味。<br><img src="https://s2.loli.net/2023/11/19/7gbknJIiecvRoDm.jpg">  </p>
+<p>一走进森林公园，给我的感觉就是：“清爽”！在这里，你可以深吸一口气，不用担心烟尘啥的，这里的空气让人很舒服。旁边这些小树林也别有也一番风味，阳关透过枝叶映射在地面上，一条一条的，很有感觉。最重要的是，这里人流很少，是真正的清净！路上有很多的休息椅子，累了也能随时坐会儿，开始给我一种真正世外桃源的感觉。  </p>
+<p><img src="https://s2.loli.net/2023/11/19/d9vpNHwF32ZWy1Y.jpg">  </p>
+<p><img src="https://s2.loli.net/2023/11/19/G67RqEiShY8VUAm.jpg"><br>在体验一番过后，突然来到了观蟒台，说实话， 我好像没咋观出哪里是蟒，可能是还在蟒山脚的缘故，看得不是很开阔，但是风景还是不错的。之后我们开始往山上的方向走去，途中经过了蟒山叠翠、碑林、然后就到了文化广场，广场上面有个水池（忘记叫什么了）。这些景点我个人感觉不是很惊艳，但也算是有该有的吧，水池是个环形的，能看到山的倒影，也算还行吧。<br><img src="https://s2.loli.net/2023/11/19/c2ZYXOgaeqw3jyd.jpg">  </p>
+<hr>
+<h3 id="山不向我，我向山去"><a href="#山不向我，我向山去" class="headerlink" title="山不向我，我向山去"></a>山不向我，我向山去</h3><p>经过这些小景点的兜兜转转后，我们才算最终踏上了通向山顶的道路，也能明显地感到坡道有些坡度了。我们往五观台的方向爬去，五观台，听说是观五样东西，一个是京城什么的，一个是水库什么的，其他几个也记不太清了，反正就是看五样不同的景观。开始上去的时候有路牌提示，说据顶点还有2000来米，大约需要2个小时，当时看了还是有些吃惊的，竟然这么高吗？没事，反正我也没咋去过，就直接上呗。于是，一个接着一个的台阶就这样在我的脚下流过。  </p>
+<p><img src="https://s2.loli.net/2023/11/19/7ofi1CFbth8yJ43.jpg">  </p>
+<p>开始的山景似乎没特别惊艳的，因为也许还没到半山腰，景色不是很丰富，但也有不同的植被，也能看到一些小山的景色。一开始觉得没什么难爬的，可能会稍微耗点体力，但是走了一小阵后发现确实有些小累，于是我们开始稍微歇会儿。歇会儿过后又继续前进，路上也碰到了一些来爬山的人，不过也不多。我们一路走着，路上也有不一样的景色，当我们走着走着时，发现太阳似乎快要落山了，有一个角度望去特别的好看，突然的这样的景色也让我给惊艳到了。<br><img src="https://s2.loli.net/2023/11/19/kxB3QMi9Yjeqlzy.jpg"><br><img src="https://s2.loli.net/2023/11/19/JAahteflu3oUZjs.jpg"><br>不知为什么，从此刻起，突然觉得现在山上的景色好好看，让原本些许累的我们也放松了一下，脚上的累也消了不少。就这样，我们一边欣赏着夕阳，一边继续前行。路上还遇上了一只“学长”，“学长”挺胖挺可爱的。  </p>
+<p><img src="https://s2.loli.net/2023/11/19/ZdK5fStEBvFk3zA.jpg">  </p>
+<p>太阳马上就落山了，我们也目睹了这场绝美的日落  </p>
+<p><img src="https://s2.loli.net/2023/11/19/brQ3s8l7JhyBo6w.jpg">  </p>
+<p><img src="https://s2.loli.net/2023/11/19/bvoPXS4c1ZVxgFI.jpg">  </p>
+<p><img src="https://s2.loli.net/2023/11/19/WxqYHV6LehuylZv.jpg">  </p>
+<p><img src="https://s2.loli.net/2023/11/19/b8Z1t5U9cB2W6VN.jpg">  </p>
+<p><img src="https://s2.loli.net/2023/11/19/be5wACm83Zvh4qK.jpg">  </p>
+<p>其实太阳落得很快，估计就几秒的时间，可能美好的东西总是很短暂吧！这也让我想起了“夕阳无限好，只是近黄昏”，但是呢，我又觉着“莫道桑榆晚，为霞尚满天”，虽然从岁数来说，放在我们身上不太合适吧，但是我觉得从做事角度，其实还是要怀抱希望，做自己热爱的，现在出发去做，不会太迟。我没有用手机录下它日落那一瞬，而更多是用眼睛去感受了。  </p>
+<h3 id="半山腰有些拥挤，到山顶看看"><a href="#半山腰有些拥挤，到山顶看看" class="headerlink" title="半山腰有些拥挤，到山顶看看"></a>半山腰有些拥挤，到山顶看看</h3><p><img src="https://s2.loli.net/2023/11/19/GtlVwKEQ9zopMib.jpg"><br>太阳已经落山了，但距离山顶还有一段距离，考虑到待会还要下山，心里有些犹豫。但是呢，山顶就在眼前了，总得去看看吧，反正现在也不算太晚，路上还有些人，于是我们就一鼓作气，冲向了山顶。  </p>
+<p><img src="https://s2.loli.net/2023/11/19/lshMWK2NVEzpmni.jpg"><br>可能是冬天+北方吧，天黑得比较快，这会儿月亮也出来了，人们也点起了灯火，从山顶上望去，夜景还是挺好看的。  </p>
+<p><img src="https://s2.loli.net/2023/11/19/Vxz7RJAG6KUqHto.jpg"><br>天黑了，也不敢待太久，稍微看看后就下山去了，幸好我们有三个人，不然我还真不敢上来。  </p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本次爬山给我的收获还是挺大的，在山里面，花花草草，虫虫鸟鸟，一山一木，一水一露，让人感到十分清净。我觉得的是，得顺其自然，做你想做的事，有想法就直接行动；做你热爱的事情，喜欢才会有动力；做能让你感到开心和快乐的事情，不必背着自己的内心，做一些不开心不快乐的事。很喜欢的的一句话：“为什么要登山？因为山就在那里”。是的，山就在那里，它们不会走动，你去它那，它就会给你反馈，给你舒心。也许它们不会说话，但是它又无时无刻不在与你互动呢？偶遇的绝美日落，半山腰出现的“可爱学长”，问鼎山峰后的夜景，这才是真正的交流，所以，喜欢就去做呗，不用太在意结果，路途中的美景本身就是一种收获，在过程中，也许就能找到答案了。</p>
+]]></content>
+      <tags>
+        <tag>风景</tag>
+      </tags>
   </entry>
   <entry>
     <title>如何将两个很大的数进行相加？</title>
@@ -492,37 +526,43 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>因为山就在那里</title>
-    <url>/2023/11/18/%E5%9B%A0%E4%B8%BA%E5%B1%B1%E5%B0%B1%E5%9C%A8%E9%82%A3%E9%87%8C/</url>
-    <content><![CDATA[<p><img src="https://s2.loli.net/2023/11/18/zBw96x5uDZNenMX.jpg"> </p>
-<p>第一次爬北京的山，看到了不一样的风景，也收获到了意外的体验。虽说是3A级景区，但这次给我的体验远不止3A，恰巧赶上了日落，路上遇到了小猫，2000多米的爬山体验，给我的感觉是，棒极了。  </p>
-<span id="more"></span> 
-<hr>
-<h3 id="千里之行，始于足下"><a href="#千里之行，始于足下" class="headerlink" title="千里之行，始于足下"></a>千里之行，始于足下</h3><p>也许是最近在学校待久了吧，课堂上一些公式化的学习生活有时让人觉得些许枯燥，刚好最近特别想去爬山，想去那就去呗！于是乎，我咨询了一下经常在北京各大山区骑行游览的同学，他随手推荐了离学校不远的蟒山。我上地图搜了一下，在网上简略地看了一下攻略，就决定出发了。没想到的是，另外有两位同学也打算出去走走，我说，那就一起呗，反正也不远。就这样，我收获了两个小伙伴。出发前，我东西收拾得差不多了，但我依然还在想是不要再准备些什么？思索了一下，我觉得不用再考虑太多了，千里之行，始于足下，想做就直接去做先，直接行动起来！  </p>
-<hr>
-<h3 id="山路崎岖，拥抱自然"><a href="#山路崎岖，拥抱自然" class="headerlink" title="山路崎岖，拥抱自然"></a>山路崎岖，拥抱自然</h3><p>在到达正式爬山之前，其实还是经历了许多的小插曲。当天我们三人是坐地铁到达关东站，然后骑着共享单车去到蟒山国家森林公园的入口。但是骑到一半突然觉出似乎山区附近没有停车点，于是本来已经快到山脚下的我们决定原路返回一段距离去最近的停车点。好在最近停车点不远，也没有迂回多少。之后我们开始等公交，可等了一会儿也没见车来，我索性提出直接打车，然后刚打车就有师傅接单了，发现路费也不贵，其实也就10来分钟的路程，不过上山有点坡度，所以骑车可能会久些。就这样我们来到了入口。检完票进去后就面临路线的选择，我想着先从山脚走起吧，就先往文化广场的方向走去。蟒山森林公园其实好多小景点都别有一番风味。<br><img src="https://s2.loli.net/2023/11/19/7gbknJIiecvRoDm.jpg">  </p>
-<p>一走进森林公园，给我的感觉就是：“清爽”！在这里，你可以深吸一口气，不用担心烟尘啥的，这里的空气让人很舒服。旁边这些小树林也别有也一番风味，阳关透过枝叶映射在地面上，一条一条的，很有感觉。最重要的是，这里人流很少，是真正的清净！路上有很多的休息椅子，累了也能随时坐会儿，开始给我一种真正世外桃源的感觉。  </p>
-<p><img src="https://s2.loli.net/2023/11/19/d9vpNHwF32ZWy1Y.jpg">  </p>
-<p><img src="https://s2.loli.net/2023/11/19/G67RqEiShY8VUAm.jpg"><br>在体验一番过后，突然来到了观蟒台，说实话， 我好像没咋观出哪里是蟒，可能是还在蟒山脚的缘故，看得不是很开阔，但是风景还是不错的。之后我们开始往山上的方向走去，途中经过了蟒山叠翠、碑林、然后就到了文化广场，广场上面有个水池（忘记叫什么了）。这些景点我个人感觉不是很惊艳，但也算是有该有的吧，水池是个环形的，能看到山的倒影，也算还行吧。<br><img src="https://s2.loli.net/2023/11/19/c2ZYXOgaeqw3jyd.jpg">  </p>
-<hr>
-<h3 id="山不向我，我向山去"><a href="#山不向我，我向山去" class="headerlink" title="山不向我，我向山去"></a>山不向我，我向山去</h3><p>经过这些小景点的兜兜转转后，我们才算最终踏上了通向山顶的道路，也能明显地感到坡道有些坡度了。我们往五观台的方向爬去，五观台，听说是观五样东西，一个是京城什么的，一个是水库什么的，其他几个也记不太清了，反正就是看五样不同的景观。开始上去的时候有路牌提示，说据顶点还有2000来米，大约需要2个小时，当时看了还是有些吃惊的，竟然这么高吗？没事，反正我也没咋去过，就直接上呗。于是，一个接着一个的台阶就这样在我的脚下流过。  </p>
-<p><img src="https://s2.loli.net/2023/11/19/7ofi1CFbth8yJ43.jpg">  </p>
-<p>开始的山景似乎没特别惊艳的，因为也许还没到半山腰，景色不是很丰富，但也有不同的植被，也能看到一些小山的景色。一开始觉得没什么难爬的，可能会稍微耗点体力，但是走了一小阵后发现确实有些小累，于是我们开始稍微歇会儿。歇会儿过后又继续前进，路上也碰到了一些来爬山的人，不过也不多。我们一路走着，路上也有不一样的景色，当我们走着走着时，发现太阳似乎快要落山了，有一个角度望去特别的好看，突然的这样的景色也让我给惊艳到了。<br><img src="https://s2.loli.net/2023/11/19/kxB3QMi9Yjeqlzy.jpg"><br><img src="https://s2.loli.net/2023/11/19/JAahteflu3oUZjs.jpg"><br>不知为什么，从此刻起，突然觉得现在山上的景色好好看，让原本些许累的我们也放松了一下，脚上的累也消了不少。就这样，我们一边欣赏着夕阳，一边继续前行。路上还遇上了一只“学长”，“学长”挺胖挺可爱的。  </p>
-<p><img src="https://s2.loli.net/2023/11/19/ZdK5fStEBvFk3zA.jpg">  </p>
-<p>太阳马上就落山了，我们也目睹了这场绝美的日落  </p>
-<p><img src="https://s2.loli.net/2023/11/19/brQ3s8l7JhyBo6w.jpg">  </p>
-<p><img src="https://s2.loli.net/2023/11/19/bvoPXS4c1ZVxgFI.jpg">  </p>
-<p><img src="https://s2.loli.net/2023/11/19/WxqYHV6LehuylZv.jpg">  </p>
-<p><img src="https://s2.loli.net/2023/11/19/b8Z1t5U9cB2W6VN.jpg">  </p>
-<p><img src="https://s2.loli.net/2023/11/19/be5wACm83Zvh4qK.jpg">  </p>
-<p>其实太阳落得很快，估计就几秒的时间，可能美好的东西总是很短暂吧！这也让我想起了“夕阳无限好，只是近黄昏”，但是呢，我又觉着“莫道桑榆晚，为霞尚满天”，虽然从岁数来说，放在我们身上不太合适吧，但是我觉得从做事角度，其实还是要怀抱希望，做自己热爱的，现在出发去做，不会太迟。我没有用手机录下它日落那一瞬，而更多是用眼睛去感受了。  </p>
-<h3 id="半山腰有些拥挤，到山顶看看"><a href="#半山腰有些拥挤，到山顶看看" class="headerlink" title="半山腰有些拥挤，到山顶看看"></a>半山腰有些拥挤，到山顶看看</h3><p><img src="https://s2.loli.net/2023/11/19/GtlVwKEQ9zopMib.jpg"><br>太阳已经落山了，但距离山顶还有一段距离，考虑到待会还要下山，心里有些犹豫。但是呢，山顶就在眼前了，总得去看看吧，反正现在也不算太晚，路上还有些人，于是我们就一鼓作气，冲向了山顶。  </p>
-<p><img src="https://s2.loli.net/2023/11/19/lshMWK2NVEzpmni.jpg"><br>可能是冬天+北方吧，天黑得比较快，这会儿月亮也出来了，人们也点起了灯火，从山顶上望去，夜景还是挺好看的。  </p>
-<p><img src="https://s2.loli.net/2023/11/19/Vxz7RJAG6KUqHto.jpg"><br>天黑了，也不敢待太久，稍微看看后就下山去了，幸好我们有三个人，不然我还真不敢上来。  </p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本次爬山给我的收获还是挺大的，在山里面，花花草草，虫虫鸟鸟，一山一木，一水一露，让人感到十分清净。我觉得的是，得顺其自然，做你想做的事，有想法就直接行动；做你热爱的事情，喜欢才会有动力；做能让你感到开心和快乐的事情，不必背着自己的内心，做一些不开心不快乐的事。很喜欢的的一句话：“为什么要登山？因为山就在那里”。是的，山就在那里，它们不会走动，你去它那，它就会给你反馈，给你舒心。也许它们不会说话，但是它又无时无刻不在与你互动呢？偶遇的绝美日落，半山腰出现的“可爱学长”，问鼎山峰后的夜景，这才是真正的交流，所以，喜欢就去做呗，不用太在意结果，路途中的美景本身就是一种收获，在过程中，也许就能找到答案了。</p>
+    <title>设计和使用Qt Designer Widget插件时遇到的问题记录及解决方案</title>
+    <url>/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/</url>
+    <content><![CDATA[<p><img src="https://s2.loli.net/2024/04/05/H1euUO5VXyZgMqR.png" alt="自定义插件"><br>最近在学习Qt中的自定义插件和库，然后在设计和使用Qt Desiger Widget插件时，发现无法找到我自己设计的Widget插件，于是分析和查询了一番，又发现了好多问题，最后一步一步分析与查询，最终成功解决了问题，成功使用自己的自定义插件，在这过程中也对一些构建配置、链接库有了更深的理解。</p>
+<span id="more"></span>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>Qt自定义的widget插件无法在Designer中显示<br><img src="https://s2.loli.net/2024/04/05/tsF7wNa5ufIni8x.png" alt="没有显示.png"><br>首先检查自己项目文件夹中release版本，发现里面只有.dll文件而没有.lib文件，于是我怀疑是不是构建配置的环境有问题，<strong>查寻帮助文档以及一些提示，发现Qt自带默认的编译器是 MinGW，Windows 平台 Qt Creator 是由 Visual Studio 编译生成的程序（MSVC编译）</strong>，两个编译器不一样，这样在就导致在Qt Designer无法加载出来自定义好的插件。<br>那么如何才能在Qt Creator中使用自定义的插件呢？目前得知两种方法：</p>
+<ul>
+<li><strong>一是用MinGW编译一一个Qt Creator，这样Qt Creator就能加载出MinGW编译出来的插件了</strong></li>
+<li><strong>二是使用MSVC版本来构建，用其重新编译一下自定义的插件，这样就能直接加载了</strong></li>
+</ul>
+<p>这里我使用的是第二种方法。</p>
+<h2 id="MinGW和MSVC"><a href="#MinGW和MSVC" class="headerlink" title="MinGW和MSVC"></a>MinGW和MSVC</h2><p>搜寻资料发现，当用<strong>MinGW编译时，会生成.dll文件和.a文件，而当用MSVC编译时，会生成.dll文件和.lib文件</strong>，这也就是为什么一开始我的release文件夹中没有找到.lib文件的原因。</p>
+<ul>
+<li>首先检查配置，打开Qt Creator–&gt;工具–&gt;选项–&gt;构建–&gt;Kits</li>
+<li>点击Compilers，查看是否有VS的MSVC版本</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/04/05/wMuGyKIjxhJTzBb.png" alt="Compilers"></p>
+<ul>
+<li>点击Debuggers，查看是否有对应的Windows Kits</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/04/05/3WE17mJnxDBHliA.png" alt="Debuggers"><br>(因为VS我之前下载过，所以上面两个都自动检测到了，如果没有的话得自己下一个VS配个环境), </p>
+<ul>
+<li>点击Qt Version， 查看是否有MSVC的版本，发现没有，则接下来就去安装对应的组件</li>
+</ul>
+<p><img src="https://s2.loli.net/2024/04/05/xadUeY3CfJX1r5k.png" alt="Qt Version"></p>
+<h2 id="MaintenanceTool使用与镜像源"><a href="#MaintenanceTool使用与镜像源" class="headerlink" title="MaintenanceTool使用与镜像源"></a>MaintenanceTool使用与镜像源</h2><ul>
+<li>打开MaintenanceTool.exe（通常在Qt安装目录下能够找到）</li>
+<li>推荐使用国内镜像源(不用也可以，但时常下载缓慢甚至出错)：点击设置–&gt;档案资料库–&gt;用户定义的档案资料库–&gt;添加–&gt;粘贴镜像源的地址（可在<a href="https://download.qt.io/static/mirrorlist/">https://download.qt.io/static/mirrorlist/</a> 里选择，我这里用的是中科大的）–&gt;点击条件测试–&gt;显示成功则没问题<br><img src="https://s2.loli.net/2024/04/05/URxydhcbq8VTn23.png" alt="镜像源"></li>
+<li>点下一步到选择组件，<strong>注意把Archive勾上然后筛选</strong>，完成后选择对应版本的Qt（如我的是Qt6.2.4）,选择对应的MSVC组件，勾上后选择下一步，安装然后等待完成即可</li>
+<li><img src="https://s2.loli.net/2024/04/05/CaTKAj3n4zy6Rxl.png" alt="安装组件"></li>
+</ul>
+<h2 id="编译链接"><a href="#编译链接" class="headerlink" title="编译链接"></a>编译链接</h2><p>安装成功后，我们回到Qt Creator的Kits，<strong>在Qt Version中添加刚下载好的MSVC版本，然后在kits中配置好编译环境</strong><br><img src="https://s2.loli.net/2024/04/05/DTbK3pfkGl4MmdI.png" alt="配置MSVC"><br>接下来我们打开原来的<strong>自定义插件项目</strong>，执行对应的release编译即可生成MSVC版本的文件，这下在release文件夹里面能够看到.dll文件和.lib文件了。把.dll文件拷贝到Qt\Tools\QtCreator\bin\plugins\designer下，之后我们打开一个项目，打开Qt Designer就能看到并使用自定义的插件了。  </p>
+<p><img src="https://s2.loli.net/2024/04/05/Mmx9EcIYtefAOXR.png" alt="组件成功显示"><br>但是这样项目还运行不起来，因为我们没有把lib库给这个项目，导致无法找到，接下来执行步骤：</p>
+<ul>
+<li>把.dll文件和.lib以及生成的.h文件拷贝到使用项目的目录中去，我们可以建一个目录命名为lib用来存放</li>
+<li>在Qt Creator中，右击项目选择添加库，然后按照说明选择刚才拷贝的.lib以及路径，点击确定</li>
+<li>最后<strong>右键项目run qmake</strong>一下然后执行编译即可成功构建项目并运行（这里需要注意的，是用release版本的库，那使用时就得也用release编译，这样才能链接上）</li>
+</ul>
 ]]></content>
-      <tags>
-        <tag>风景</tag>
-      </tags>
   </entry>
 </search>
