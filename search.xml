@@ -639,10 +639,10 @@
 <li>使用资源被move后的对象<br>在main函数中添加如下：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyString obj&#123; <span class="string">&quot;abc&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">f_move</span>(std::<span class="built_in">move</span>(obj));</span><br><span class="line">    std::cout &lt;&lt; obj._data &lt;&lt; std::endl; <span class="comment">// danger!</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;==================== end ==================&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 会导致报错与程序崩溃：</li>
 </ul>
-<p><img src="/.io//image-13.png" alt="alt text"><br>因为此时obj中的内容已经为空了！</p>
+<p><img src="https://s2.loli.net/2024/04/22/ELGHUbxXiOBp4eJ.png" alt="image.png"><br>因为此时obj中的内容已经为空了！</p>
 <ul>
 <li>在实现移动构造函数时不赋值为nullptr<br>将这里注释掉：<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">MyString</span>(MyString&amp;&amp; str) <span class="keyword">noexcept</span></span><br><span class="line">    : _data(str._data) &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;move this object&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">//str._data = nullptr;//这一步很重要</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-程序崩溃：<br><img src="/.io//image-14.png" alt="alt text"></li>
+程序崩溃：<br><img src="https://s2.loli.net/2024/04/22/Fh5WiAP8U6vKjX7.png" alt="image.png"></li>
 </ul>
 <p>因为我们没将源对象指针置空，两个指针指向同一块资源，当他们生命周期结束后，都会释放同一块资源，导致两次释放！</p>
 <blockquote>
