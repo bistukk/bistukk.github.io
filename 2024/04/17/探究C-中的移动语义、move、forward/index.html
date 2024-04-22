@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+       
+      <meta name="keywords" content="生活，旅行，思考，代码，博客" />
+       
+      <meta name="description" content="一座孤岛" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>探究C++中的移动语义（左值、右值、引用、move） |  L I V E</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="L I V E" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-探究C-中的移动语义、move、forward"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  探究C++中的移动语义（左值、右值、引用、move）
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2024/04/17/%E6%8E%A2%E7%A9%B6C-%E4%B8%AD%E7%9A%84%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E3%80%81move%E3%80%81forward/" class="article-date">
+  <time datetime="2024-04-17T04:21:51.000Z" itemprop="datePublished">2024-04-17</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">12 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><img src="https://s2.loli.net/2024/04/22/D8iWHj9V6PknflQ.png"></p>
+<h1 id="引例"><a href="#引例" class="headerlink" title="引例"></a>引例</h1><p>普通构造与移动语义的时间对比</p>
+<span id="more"></span>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个大数据量的字符串</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> dataSize = <span class="number">1000000</span>; <span class="comment">// 1,000,000 characters</span></span><br><span class="line">    <span class="type">char</span>* largeString = <span class="keyword">new</span> <span class="type">char</span>[dataSize + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; dataSize; ++i) &#123;</span><br><span class="line">        largeString[i] = <span class="string">&#x27;A&#x27;</span>; <span class="comment">// 填充字符 &#x27;A&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    largeString[dataSize] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">// 添加字符串结束符</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量使用移动构造的执行时间</span></span><br><span class="line">    <span class="keyword">auto</span> startMoveConstructor = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="function">MyString <span class="title">temp</span><span class="params">(largeString)</span></span>;</span><br><span class="line">    MyString moved = std::<span class="built_in">move</span>(temp);</span><br><span class="line">    <span class="keyword">auto</span> endMoveConstructor = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationMoveConstructor = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endMoveConstructor - startMoveConstructor);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by move constructor: &quot;</span> &lt;&lt; durationMoveConstructor.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量使用拷贝构造的执行时间</span></span><br><span class="line">    <span class="keyword">auto</span> startCopyConstructor = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="function">MyString <span class="title">tempCopy</span><span class="params">(largeString)</span></span>;</span><br><span class="line">    <span class="function">MyString <span class="title">copied</span><span class="params">(tempCopy)</span></span>;</span><br><span class="line">    <span class="keyword">auto</span> endCopyConstructor = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationCopyConstructor = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endCopyConstructor - startCopyConstructor);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by copy constructor: &quot;</span> &lt;&lt; durationCopyConstructor.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量使用移动赋值的执行时间</span></span><br><span class="line">    <span class="keyword">auto</span> startMoveAssignment = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="function">MyString <span class="title">anotherTemp</span><span class="params">(largeString)</span></span>;</span><br><span class="line">    MyString assigned;</span><br><span class="line">    assigned = std::<span class="built_in">move</span>(anotherTemp);</span><br><span class="line">    <span class="keyword">auto</span> endMoveAssignment = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationMoveAssignment = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endMoveAssignment - startMoveAssignment);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by move assignment: &quot;</span> &lt;&lt; durationMoveAssignment.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量使用拷贝赋值的执行时间</span></span><br><span class="line">    <span class="keyword">auto</span> startCopyAssignment = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="function">MyString <span class="title">anotherTempCopy</span><span class="params">(largeString)</span></span>;</span><br><span class="line">    MyString assignedCopy;</span><br><span class="line">    assignedCopy = anotherTempCopy;</span><br><span class="line">    <span class="keyword">auto</span> endCopyAssignment = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationCopyAssignment = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endCopyAssignment - startCopyAssignment);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by copy assignment: &quot;</span> &lt;&lt; durationCopyAssignment.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span>[] largeString; <span class="comment">// 释放动态分配的内存</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量返回值优化的执行时间（使用移动语义）</span></span><br><span class="line">    <span class="keyword">auto</span> startReturnFromFunctionWithMove = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    MyString returnedFromFunction = <span class="built_in">getMyString</span>(); <span class="comment">// 假设有一个函数 getMyString() 返回 MyString</span></span><br><span class="line">    <span class="keyword">auto</span> endReturnFromFunctionWithMove = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationReturnFromFunctionWithMove = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endReturnFromFunctionWithMove - startReturnFromFunctionWithMove);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by return from function with move: &quot;</span> &lt;&lt; durationReturnFromFunctionWithMove.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 测量返回值优化的执行时间（不使用移动语义）</span></span><br><span class="line">    <span class="keyword">auto</span> startReturnFromFunctionWithoutMove = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    MyString returnedFromFunctionWithoutMove = <span class="built_in">getMyStringWithoutMove</span>(); <span class="comment">// 使用没有移动语义的返回</span></span><br><span class="line">    <span class="keyword">auto</span> endReturnFromFunctionWithoutMove = high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> durationReturnFromFunctionWithoutMove = <span class="built_in">duration_cast</span>&lt;microseconds&gt;(endReturnFromFunctionWithoutMove - startReturnFromFunctionWithoutMove);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Time taken by return from function without move: &quot;</span> &lt;&lt; durationReturnFromFunctionWithoutMove.<span class="built_in">count</span>() &lt;&lt; <span class="string">&quot; microseconds&quot;</span> &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+<p>得出的结果如下：<br><img src="https://s2.loli.net/2024/04/22/FfGYodwnb4iDNuH.png"><br>可以看出，使用移动语义后能提高我们程序的效率，这就是为什么C++11以后会有语义的概念，其实主要都是为了提升效率而不断引入的。接下来我们一步一步探究其中的奥秘，首先来看一些概念</p>
+<h1 id="一、左值与右值"><a href="#一、左值与右值" class="headerlink" title="一、左值与右值"></a>一、左值与右值</h1><p><strong>C++中的表达式，要么是左值，要么是右值</strong>。左值是可寻址的变量，有持久性；而右值一般是不可寻址的常量，或在表达式求值过程中创建的无名临时对象，短暂性的。<br>通常情况讲，左值就是能放在等号左边的表达式，如</p>
+<blockquote>
+<p>int i &#x3D; 1;<br>i &#x3D; 2;  </p>
+</blockquote>
+<p>这里的变量i就是左值，他是可修改的，但是加上const之后，他就具有常量属性，不可修改</p>
+<blockquote>
+<p>const int i &#x3D; 1;<br>i &#x3D; 2;&#x2F;&#x2F;错误。因为i具有常量属性，不可修改    </p>
+</blockquote>
+<p>能用到左值的运算符通常有：</p>
+<ul>
+<li>赋值运算符<blockquote>
+<p>int a;<br>a &#x3D; 4;&#x2F;&#x2F;整个赋值语句的结果仍然是左值</p>
+</blockquote>
+</li>
+<li>取地址 &amp;<blockquote>
+<p>int a &#x3D; 4;&#x2F;&#x2F;变量就是左值<br>&amp;a;</p>
+</blockquote>
+</li>
+<li>下标，如string, vector下标[]都需要左值<blockquote>
+<p>string s &#x3D; “I’m KK”;<br>s[0];<br>vector<int>::iterator iter;<br>iter++; iter–  </int></p>
+</blockquote>
+</li>
+<li>通过看运算符在字面量上的操作判断<blockquote>
+<p>i++;&#x2F;&#x2F;正确<br>9++;&#x2F;&#x2F;错误</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>而不是左值的，就是右值，右值也会被称为临时值</strong></p>
+<h1 id="二、引用的分类"><a href="#二、引用的分类" class="headerlink" title="二、引用的分类"></a>二、引用的分类</h1><h2 id="左值引用（绑定到左值上）带一个“-amp-”"><a href="#左值引用（绑定到左值上）带一个“-amp-”" class="headerlink" title="左值引用（绑定到左值上）带一个“&amp;”"></a>左值引用（绑定到左值上）带一个“&amp;”</h2><p>我们希望引用的对象可改变值，就会用到左值引用。左值引用只能绑定到左值上</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="type">int</span>&amp; b&#123;a&#125;; <span class="comment">//正确，a是左值，b可以绑定</span></span><br><span class="line"><span class="type">int</span>&amp; c;<span class="comment">//错误，引用必须要初始化</span></span><br><span class="line"><span class="type">int</span>&amp; d = <span class="number">1</span>;<span class="comment">//错误，左值引用不能绑右值</span></span><br></pre></td></tr></table></figure>
+<h2 id="cosnt引用-常量引用"><a href="#cosnt引用-常量引用" class="headerlink" title="cosnt引用(常量引用)"></a>cosnt引用(常量引用)</h2><p>常量引用也是左值引用，但是我们希望引用的对象是不改变的,const引用可以绑左值，右值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> t = <span class="number">1</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; a = t;</span><br><span class="line">a = <span class="number">2</span>;<span class="comment">//错误，a具有const属性，不是可修改的左值</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; b = <span class="number">2</span>;<span class="comment">//正确，const引用可以绑定到右值上,这里就区别于普通左值引用了</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    其实“const int&amp; b = 10;”这句发生了这个事情:</span></span><br><span class="line"><span class="comment">    int tmp = 2;//这里的tmp是一个临时变量</span></span><br><span class="line"><span class="comment">    const int&amp; b = tmp;</span></span><br><span class="line"><span class="comment">/*</span></span><br></pre></td></tr></table></figure>
+<h2 id="右值引用（绑定到右值上）带”-amp-amp-”"><a href="#右值引用（绑定到右值上）带”-amp-amp-”" class="headerlink" title="右值引用（绑定到右值上）带”&amp;&amp;”"></a>右值引用（绑定到右值上）带”&amp;&amp;”</h2><p>右值引用主要是来绑定到那些<strong>临时的或者即将销毁的对象</strong>，右值引用只能绑右值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>&amp;&amp; a = <span class="number">1</span>;<span class="comment">//正确</span></span><br><span class="line"><span class="type">int</span> i = <span class="number">2</span>;</span><br><span class="line"><span class="type">int</span>&amp;&amp; b = i;<span class="comment">//错误，右值引用不能绑左值</span></span><br><span class="line"><span class="type">int</span>&amp;&amp; c = i * <span class="number">100</span><span class="comment">//正确，i * 100 结果是右值</span></span><br></pre></td></tr></table></figure>
+<h2 id="小结几点"><a href="#小结几点" class="headerlink" title="小结几点"></a>小结几点</h2><ul>
+<li>（1）前置递增减运算符与后置递增减运算符的区别<br>前置递增减运算法是左值表达式，因为++i是直接将i变量+1然后再返回i本身，而后置递增运算符是右值表达式，因为i++是先产生一个临时变量来保存i的值用于使用目的，再给i+1，之后系统再释放这个临时变量,临时变量被释放掉了，不能再被赋值;<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i = <span class="number">7</span>;</span><br><span class="line">(++i) = <span class="number">20</span>;<span class="comment">//正确，i被赋值成20</span></span><br><span class="line">(i++) = <span class="number">10</span>;<span class="comment">//错误,表达式必须是可修改的左值</span></span><br><span class="line"><span class="type">int</span> j = <span class="number">1</span>;</span><br><span class="line"><span class="type">int</span>&amp;&amp; a = j++;<span class="comment">//可以，成功绑定右值,但此后a的值和j没关系</span></span><br><span class="line"><span class="type">int</span>&amp; b = j++<span class="comment">//不可以，左值引用不能绑右值表达式</span></span><br></pre></td></tr></table></figure></li>
+<li>(2) &amp;&amp;r1绑定到了右值，但r1是本身是左值(看成一个变量)</li>
+<li>(3) 所有变量都要看成左值，因为他们是有地址的</li>
+<li>(3)临时对象都是右值</li>
+</ul>
+<h1 id="三、探究临时对象"><a href="#三、探究临时对象" class="headerlink" title="三、探究临时对象"></a>三、探究临时对象</h1><p>前面的例子中我们提到临时对象，临时对象的产生往往容易被我们忽略，而产生临时对象会消耗资源和空间，这对于我们的程序，应该是尽量去避免产生临时对象以达到提高、优化性能的目的。<br>以下是一些常见的会产生临时值的地方：</p>
+<ul>
+<li>函数传参<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">func</span>(<span class="string">&quot;some temporary string&quot;</span>);<span class="comment">//这里虽然传的是常量，但是C++中大概率还是产生一个临时变量来复制</span></span><br></pre></td></tr></table></figure></li>
+<li>初始化<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v.<span class="built_in">push_back</span>(<span class="built_in">x</span>());<span class="comment">//这里会初始化一个临时的x，然后被复制进vector</span></span><br></pre></td></tr></table></figure></li>
+<li>类型转换产生<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TValue sum;</span><br><span class="line">sum = <span class="number">100</span>;<span class="comment">//这里会产生一个临时的TValue的对象来进行调用一个拷贝赋值</span></span><br></pre></td></tr></table></figure></li>
+<li>函数返回对象时<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TValue <span class="title">doubled</span><span class="params">(TValue&amp; t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    TValue tmp;</span><br><span class="line">    tmp.x = t.x * <span class="number">2</span>;</span><br><span class="line">    tmp.y = t.y * <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> tmp;<span class="comment">//这里会产生一个临时对象用于返回，tmp是左值，但优先移动，不支持移动时仍可复制。但要注意，现在的大多编译器会进行优化</span></span><br><span class="line">&#125;</span><br><span class="line">```  </span><br><span class="line">* 表达式赋值</span><br><span class="line">```cpp</span><br><span class="line">a = b + c; <span class="comment">// b+c是一个临时值, 然后被赋值给了a  </span></span><br><span class="line">a = b + c + d; <span class="comment">//c+d是一个临时变量, b+(c+d)是另一个临时变量</span></span><br></pre></td></tr></table></figure></li>
+<li>后置递增减运算符<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x++; <span class="comment">// 前面提到的，先产生一个临时变量来保存i的值用于使用目的，再给i+1，之后系统再释放这个临时变量,临时变量被释放掉了，不能再被赋值;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="四、对象移动与move-的作用"><a href="#四、对象移动与move-的作用" class="headerlink" title="四、对象移动与move()的作用"></a>四、对象移动与move()的作用</h1><h2 id="对象移动"><a href="#对象移动" class="headerlink" title="对象移动"></a>对象移动</h2><p>什么是对象移动？对象移动其实就是把一个不想用了的对象A(临时值那些)中的一些有用的数据提取出来，在构建新对象B时就不需要重新构建对象中的所有数据————而是直接从A中提取出来，这样就避免了拷贝复制浪费资源与效率</p>
+<h2 id="move-函数"><a href="#move-函数" class="headerlink" title="move()函数"></a>move()函数</h2><p>move()函数的作用就是将一个左值强制转换成右值，这样就能使得一个右值引用能绑定到这个转换成的右值对象了。请注意：<strong>C++中的move函数只是做了类型转换，并不会真正的实现值的移动！！！</strong> 要实现真正的移动，得自己手动重载移动构造函数和移动复制函数。<strong>我们需要在自己的类中实现移动语义，避免深拷贝，充分利用右值引用和std::move的语言特性。</strong><br>不过实际上，通常情况下C++编译器会默认在用户自定义的class和struct中生成移动语义函数。这样的前提是我们自己没有主动定义该类的拷贝构造等函数。</p>
+<p>需要注意的点是：</p>
+<ul>
+<li>对象在被move后，并没有被立即析构，而是在其离开作用域后才会被析构，如果此时继续使用被析构的对象的一些变量，会发生一些意想不到的错误。因此一般需要手动将源对象的值置空，以防止同一片内存区域被多次释放！</li>
+<li>如果我们没有提供移动构造函数，只提供了拷贝构造函数，std::move()会失效但是不会发生错误，因为编译器找不到移动构造函数就去寻找拷贝构造函数，这也是拷贝构造函数的参数是const T&amp;常量左值引用的原因！</li>
+<li>c++11中的所有容器都实现了move语义</li>
+<li>一些基本类型使用move还是会被复制，因为它们没有对象的移动构造函数，所以move对于含有内存，文件句柄等资源对象更有意义</li>
+</ul>
+<h1 id="五、移动构造函数与移动赋值运算符"><a href="#五、移动构造函数与移动赋值运算符" class="headerlink" title="五、移动构造函数与移动赋值运算符"></a>五、移动构造函数与移动赋值运算符</h1><p>下面给出一个使用移动构造和移动赋值运算符的地址：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyString</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//constructor</span></span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">MyString</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (data != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">            _data = <span class="keyword">new</span> <span class="type">char</span>[<span class="built_in">strlen</span>(data) + <span class="number">1</span>];</span><br><span class="line">            <span class="built_in">strcpy</span>(_data, data);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            _data = <span class="keyword">new</span> <span class="type">char</span>[<span class="number">1</span>];</span><br><span class="line">            *_data = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;built this object, address: &quot;</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Destructor</span></span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">MyString</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;destruct this object, address: &quot;</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">delete</span>[] _data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Move constructor</span></span><br><span class="line">    <span class="built_in">MyString</span>(MyString&amp;&amp; str) <span class="keyword">noexcept</span></span><br><span class="line">        : _data(str._data) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;move this object&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        str._data = <span class="literal">nullptr</span>;<span class="comment">//这一步很重要</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//copy assignment</span></span><br><span class="line">    MyString&amp; <span class="keyword">operator</span>=(<span class="type">const</span> MyString&amp; str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == &amp;str)<span class="comment">//避免自我赋值</span></span><br><span class="line">            <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">delete</span>[] _data;</span><br><span class="line">        _data = <span class="keyword">new</span> <span class="type">char</span>[<span class="built_in">strlen</span>(str._data) + <span class="number">1</span>];</span><br><span class="line">        <span class="built_in">strcpy</span>(_data, str._data);</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Move assignment</span></span><br><span class="line">    MyString&amp; <span class="keyword">operator</span> = (MyString&amp;&amp; str) <span class="keyword">noexcept</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == &amp;str)<span class="comment">//避免自我赋值</span></span><br><span class="line">            <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">delete</span>[] _data;</span><br><span class="line">        _data = str._data;</span><br><span class="line">        str._data = <span class="literal">nullptr</span>;<span class="comment">//不再指向之前的资源</span></span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">char</span>* _data;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">f_move</span><span class="params">(MyString&amp;&amp; obj)</span> </span>&#123;</span><br><span class="line">	<span class="function">MyString <span class="title">a_obj</span><span class="params">(std::move(obj))</span></span>;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;move function, address: &quot;</span> &lt;&lt; &amp;a_obj &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyString obj&#123; <span class="string">&quot;abc&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">f_move</span>(std::<span class="built_in">move</span>(obj));</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;==================== end ==================&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>输出结果如下:  </p>
+<p><img src="https://s2.loli.net/2024/04/22/aZKqYXgB2TuFbfx.png"></p>
+<p>观察输出结果，可以验证我们上诉所说的<br>这里我们需要注意：<strong>在移动构造函数和移动赋值函数中，我们将当前待移动对象的资源赋值为了空（str._data&#x3D;nullptr），这里就是我们手动实现了资源的移动！</strong><br>假如尝试修改两个地方，将导致报错：</p>
+<ul>
+<li>使用资源被move后的对象<br>在main函数中添加如下：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    MyString obj&#123; <span class="string">&quot;abc&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">f_move</span>(std::<span class="built_in">move</span>(obj));</span><br><span class="line">    std::cout &lt;&lt; obj._data &lt;&lt; std::endl; <span class="comment">// danger!</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;==================== end ==================&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+会导致报错与程序崩溃：</li>
+</ul>
+<p><img src="/.io//image-13.png" alt="alt text"><br>因为此时obj中的内容已经为空了！</p>
+<ul>
+<li>在实现移动构造函数时不赋值为nullptr<br>将这里注释掉：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">MyString</span>(MyString&amp;&amp; str) <span class="keyword">noexcept</span></span><br><span class="line">    : _data(str._data) &#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;move this object&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">//str._data = nullptr;//这一步很重要</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+程序崩溃：<br><img src="/.io//image-14.png" alt="alt text"></li>
+</ul>
+<p>因为我们没将源对象指针置空，两个指针指向同一块资源，当他们生命周期结束后，都会释放同一块资源，导致两次释放！</p>
+<blockquote>
+<p>参考资料：<br>《C++新经典》——王建伟<br> 深入理解C++中的move和forward ——腾讯云开发者 张凯</p>
+</blockquote>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bistukk.github.io/2024/04/17/%E6%8E%A2%E7%A9%B6C-%E4%B8%AD%E7%9A%84%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E3%80%81move%E3%80%81forward/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2024/04/05/%E8%AE%BE%E8%AE%A1%E5%92%8C%E4%BD%BF%E7%94%A8Qt-Designer-Widget%E6%8F%92%E4%BB%B6%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">设计和使用Qt Designer Widget插件时遇到的问题记录及解决方案</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+    
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022-2024
+        <i class="ri-heart-fill heart_icon"></i> Capper
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="L I V E"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
