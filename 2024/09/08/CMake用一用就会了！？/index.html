@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+       
+      <meta name="keywords" content="生活，旅行，思考，代码，博客" />
+       
+      <meta name="description" content="一座孤岛" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>CMake用一用就会了？！ |  L I V E</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="L I V E" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-CMake用一用就会了！？"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  CMake用一用就会了？！
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2024/09/08/CMake%E7%94%A8%E4%B8%80%E7%94%A8%E5%B0%B1%E4%BC%9A%E4%BA%86%EF%BC%81%EF%BC%9F/" class="article-date">
+  <time datetime="2024-09-08T13:58:59.000Z" itemprop="datePublished">2024-09-08</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">5.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">22 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p><img src="https://s2.loli.net/2024/09/28/u9PqLiXtlcRKwOy.png"></p>
+<pre><code>“一个厨子做菜，抛开味道不谈，他至少得知道原材料是什么以及原材料在哪。”
+</code></pre>
+<span id="more"></span> 
+<p>前些日子接触了一些规模相对较大的项目，但一开始的项目编译就给我来了个下马威，该项目使用CMake构建，之前我对于CMake还停留在其只是一个项目构建工具的阶段，对里面的操作，细节不少还是比较生疏与模糊，所以对于我来说要把项目跑起来还不简单，于是乎就去学习并实践了CMake这个东西，最终也解决了相关问题， 这过程让我对于一些编译链接的底层有了更深入的理解，我也对如何组织我的代码，如何组织构建一个工程项目有了新的认识</p>
+<hr>
+<h1 id="CMake简单实战"><a href="#CMake简单实战" class="headerlink" title="CMake简单实战"></a>CMake简单实战</h1><p>我们完成一个计算小demo，以此来感受一下CMake的使用，在这里就直接用Visual Studio来完成<br>首先打开心爱的VS，然后我们选CMake工程，创建一个CMake工程项目。先清空一下自动生成的文件，然后添加一些目录与文件，工程结构如图所示：<br><img src="https://s2.loli.net/2024/09/28/wYxC9y5lHJNR7Q6.png"><br>其实要写的和平时的项目没啥区别，我们先把该demo写完：</p>
+<ul>
+<li>main.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;add.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sub.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mul.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;divi.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">add</span>(<span class="number">114</span>, <span class="number">514</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">sub</span>(<span class="number">514</span>, <span class="number">114</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">mul</span>(<span class="number">514</span>, <span class="number">114</span>) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">divi</span>(<span class="number">514</span>, <span class="number">114</span>) &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>add.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>add.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;add.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>sub.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li>sub.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;sub.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>剩下的代码类似，这样我们就构建好了一个Cal的demo,但是我们现在运行不起来的，因为我们这个是CMake工程，得编写一下CMake文件，打开我们的CMakeLists.txt文件,写下基础几步</p>
+<ul>
+<li><strong>首先指定CMake最低版本</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span> (VERSION <span class="number">3.8</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>定义项目名称</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">project</span> (<span class="string">&quot;CMakeProject1&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><strong>添加源文件</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">add_executable</span>(cal</span><br><span class="line">    src/main.cpp</span><br><span class="line">    cal/add.cpp</span><br><span class="line">    cal/sub.cpp</span><br><span class="line">    cal/mul.cpp</span><br><span class="line">    cal/divi.cpp</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+这里是为项目添加一个可执行目标文件cal，然后后面的main.cpp、add.cpp等都是该目标文件所要用到的源文件。</li>
+<li><strong>添加头文件路径</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">include_directories</span>(cal)</span><br></pre></td></tr></table></figure>
+我们这里的头文件都包含在cal这个目录下，指定后就会告诉编译器去这个路径下去找所要包含的头文件</li>
+</ul>
+<p><strong>demo完整CMakeLists代码如下：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span> (VERSION <span class="number">3.8</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">project</span> (<span class="string">&quot;CMakeProject1&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">include_directories</span>(cal)</span><br><span class="line"></span><br><span class="line"><span class="built_in">add_executable</span>(cal</span><br><span class="line">    src/main.cpp</span><br><span class="line">    cal/add.cpp</span><br><span class="line">    cal/sub.cpp</span><br><span class="line">    cal/mul.cpp</span><br><span class="line">    cal/divi.cpp</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>编写完CMake文件后，我们按下<strong>ctrl + s</strong>保存一下，则会自动完成CMake生成  </p>
+<p><img src="https://s2.loli.net/2024/09/28/8jspEXcF4WTbJum.png"><br>接着我们会看到多了一个cal的可执行程序：<br><img src="https://s2.loli.net/2024/09/28/t79SarKzh2AoYFs.png"></p>
+<p>运行该程序，即可看到输出结果：  </p>
+<p><img src="https://s2.loli.net/2024/09/28/KgOId42bwUVNJa1.png"> </p>
+<p>至此我们就完成了这个用CMake来构建的cal的demo<br>当然我们也只是完成了构建并成功跑了起来，而对于为什么要这样做，这样做的目的是什么，还没有去探究，比如为什么需要指定一个可执行程序？为什么需要指定头文件的包含目录？等等，我们接下来就去看看这些做法的意义。</p>
+<hr>
+<h1 id="编译与链接"><a href="#编译与链接" class="headerlink" title="编译与链接"></a>编译与链接</h1><pre><code>“一个厨子做菜，抛开味道不谈，他至少得知道原材料是什么以及原材料在哪。”
+</code></pre>
+<h2 id="从源文件到可执行文件过程中发生了什么？"><a href="#从源文件到可执行文件过程中发生了什么？" class="headerlink" title="从源文件到可执行文件过程中发生了什么？"></a>从源文件到可执行文件过程中发生了什么？</h2><p>我们都知道，当我们写好一个文件后，想要把它变成可执行文件，要经历以下几步：</p>
+<ul>
+<li>预处理</li>
+<li>编译</li>
+<li>汇编</li>
+<li>链接</li>
+</ul>
+<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>编译器在正式编译之前会对源代码进行预处理。这一步主要包括：</p>
+<ul>
+<li>处理头文件的包含（例如C&#x2F;C++中的#include）。</li>
+<li>处理宏定义和替换（例如#define和#ifdef等）。</li>
+<li>移除注释和执行条件编译指令。</li>
+</ul>
+<p>预处理的结果是一个中间代码文件，该文件扩展名通常还是源文件的扩展名（如.i或.ii，根据语言和编译器不同有所区别）。</p>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>在编译阶段，编译器将预处理过的源代码转换为中间代码或目标代码（即机器指令的汇编语言）。该过程包括：</p>
+<ul>
+<li>词法分析：将代码分解为基本语法元素（token）。</li>
+<li>语法分析：检查代码的结构是否符合编程语言的语法规则，生成抽象语法树（AST）。</li>
+<li>语义分析：检查代码的逻辑是否合理，例如类型检查、变量是否声明等。</li>
+<li>中间代码生成：生成机器无关的中间表示形式。</li>
+<li>目标代码生成：将中间表示转为机器码，通常是汇编代码。此时生成的文件叫目标文件（.o或.obj）。</li>
+</ul>
+<p>目标文件是计算机可理解的低级代码，但尚不可执行。<strong>这里具体的可以看《编译原理》这门课与教材。</strong></p>
+<h3 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h3><ul>
+<li>编译器生成的汇编代码通过汇编器（assembler）转化为机器语言的二进制形式，成为目标文件（Object File）。在这个阶段，代码还不能独立运行。</li>
+<li>目标文件中可能包含了未解析的符号（例如函数调用或变量引用），这些符号将在链接阶段被解析。</li>
+</ul>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ul>
+<li>链接器（Linker）负责将所有目标文件、库文件以及依赖项链接在一起，生成一个完整的可执行文件。</li>
+<li>链接分为两种：<br>（1）静态链接：将所有的库函数和依赖项直接嵌入到可执行文件中。生成的可执行文件体积较大，但不依赖外部库。<br>（2）动态链接：链接器将代码和动态库的引用放在可执行文件中，在运行时加载这些库。生成的可执行文件较小，依赖运行时的库文件（例如.dll或.so）。</li>
+<li>链接器还会解析目标文件中的符号，将函数调用和变量引用的地址填充到正确的位置。</li>
+</ul>
+<p>对于链接来说，链接器会做很多事情，如<strong>符号解析、地址分配、重定位、节段合并、库文件处理等，具体可以看看《计算机的底层秘密》、《程序员的自我修养》。</strong><br>经过这几步，一个可执行程序就诞生了，我们可以直接在操作系统中运行起来。那其实我们再回到CMake上，也同样在做这几步，<strong>目标文件，依赖项，库。</strong></p>
+<hr>
+<h3 id="错误探究"><a href="#错误探究" class="headerlink" title="错误探究"></a>错误探究</h3><p>接下来我们尝试对刚才的demo中的CMakeLists做一些变动，看看会发生什么</p>
+<ul>
+<li><strong>注释掉include_directories</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#<span class="built_in">include_directories</span>(cal)</span><br></pre></td></tr></table></figure>
+ctrl + s保存后，重新生成，不出意外我们会喜提一个错误：<blockquote>
+<p>严重性	代码	说明	项目	文件	行	禁止显示状态<br>错误	C1083	无法打开包括文件: “add.h”: No such file or directory	D:\C++程序设计\CMakeProject1\out\build\x86-debug\CMakeProject1	D:\C++程序设计\CMakeProject1\src\main.cpp	2</p>
+</blockquote>
+</li>
+</ul>
+<p>	</p>
+<p>C1083 无法打开包括文件”add.h”，这个错误表明，**我们引入了一个”add.h”的文件，但是编译器无法找到，编译器查找””引入的文件时，首先会在当前源文件所在目录去找，而我们的main.cpp与add.h文件并不在同一个目录下，所以会找不到，接着编译器会再去我们所指定的目录去找，也就是前面的include_directories，由于我们已经将其注释，所以编译器也无法找到，于是就会发生，无法打开”add.h”的错误。<br>我们把注释取消，告诉编译器去”cal”目录下查找，ctrl + s保存后重新生成，全部生成成功。</p>
+<ul>
+<li><strong>注释掉其中一个依赖的cpp文件</strong><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">add_executable</span>(cal</span><br><span class="line">    src/main.cpp</span><br><span class="line">    <span class="meta">#cal/add.cpp</span></span><br><span class="line">    cal/sub.cpp</span><br><span class="line">    cal/mul.cpp</span><br><span class="line">    cal/divi.cpp</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+ctrl + s保存后，重新生成，不出意外的喜提一个链接错误：<blockquote>
+<p>严重性	代码	说明	项目	文件	行	禁止显示状态<br>错误	LNK2019	无法解析的外部符号 “int __cdecl add(int,int)” (?add@@YAHHH@Z)，函数 _main 中引用了该符号	D:\C++程序设计\CMakeProject1\out\build\x86-debug\CMakeProject1	D:\C++程序设计\CMakeProject1\out\build\x86-debug\main.cpp.obj	1</p>
+</blockquote>
+</li>
+</ul>
+<p>Link2019 无法解析的外部符号，相信很多朋友都遇到过这个错误，报这个错误的原因其实就是在链接阶段，通这意味着编译成功了，但在链接阶段未能找到某个外部符号（函数或变量）的定义。具体错误信息表明：在 main.cpp 文件中的 main 函数里调用了一个函数 add，但链接器无法找到这个 add 函数的定义，因此抛出了“无法解析的外部符号”的错误。	<strong>那为什么编译能过呢？因为我们已经给它声明了，在main.cpp中引用了add.h的头文件，告诉编译器有这个函数，编译器不需要知道这个函数的实现的具体位置，而那是在链接阶段做的事情。</strong><br>我们把注释取消，添加目标文件所依赖的add.cpp，这时候在链接阶段就能去找到了，ctrl + s保存后重新生成，生成成功。</p>
+<blockquote>
+<p><strong>“一个厨子做菜，抛开味道不谈，他至少得知道原材料是什么以及原材料在哪。”</strong>，而我们要生成的可执行文件就是这道菜，原材料就是我们所需要的依赖文件以及库文件，原材在哪就是我们需要去指定找的路径与过程，而CMake的那些语法正是在做这些事情。</p>
+</blockquote>
+<hr>
+<h2 id="库"><a href="#库" class="headerlink" title="库"></a>库</h2><p>前面我们通过回顾小学时期学的编译链接过程与对demo的分析，已经初步了解了CMake的这些语法在干嘛，以及为什么要这样做，在不依赖任何第三方库的情况下，我们已经能够脱离任何IDE来跑起来一个可执行程序了，现在我们就来探究一下库这个东西以及如何在CMake上完成对库的操作。<br>首先回顾一下库的知识:</p>
+<ul>
+<li>库：是一个代码的集合，可以被多个程序共享。库提供了特定功能的实现，开发者可以直接调用库中的代码，而不需要重新实现这些功能。库通常分为两个类型：静态库和动态库。</li>
+</ul>
+<h3 id="静态库与静态链接"><a href="#静态库与静态链接" class="headerlink" title="静态库与静态链接"></a>静态库与静态链接</h3><p><strong>静态库回顾</strong></p>
+<ul>
+<li><p>定义：静态库（Static Library）是指在编译时将库中的代码直接嵌入到可执行文件中。这意味着当你编译程序时，静态库的代码会被复制到最终的可执行文件中。</p>
+</li>
+<li><p>文件扩展名：在Windows下通常是 .lib，在Unix&#x2F;Linux下通常是 .a。</p>
+</li>
+<li><p>优点：<br>（1）独立性：静态库的代码被包含在可执行文件中，因此运行时不需要依赖库文件，减少了部署时的复杂性。<br>（2）速度：在程序启动时，无需加载外部库，可能会稍微提高启动速度。</p>
+</li>
+<li><p>缺点：<br>（1）体积：因为每个可执行文件都包含库的代码，生成的可执行文件通常会比较大。<br>（2）更新困难：如果库的实现需要更新，所有使用该库的可执行文件都必须重新编译。</p>
+</li>
+</ul>
+<h4 id="制作静态库"><a href="#制作静态库" class="headerlink" title="制作静态库"></a>制作静态库</h4><p>我们来完成一个静态库的制作，也是一个计算的demo，只不过我们把所需的源文件都制作成库。项目开始的结构：<br><img src="https://s2.loli.net/2024/09/28/U4WTHqj5EwGcb8z.png"><br>首先是head.h头文件：</p>
+<ul>
+<li>head.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> HEAD_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HEAD_H</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">mul</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">divi</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+我们打包成库时也要给比人提供头文件，这样才方便调用，这里就直接把头文件放入一个head.h中</li>
+</ul>
+<p>然后是各功能的源文件：</p>
+<ul>
+<li>add.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>sub.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+其余的类似<br>接着编写CMakeList文件：</li>
+<li>CMakeList文件<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"># 项目名称</span><br><span class="line"><span class="built_in">project</span>(CMakeProject1)</span><br><span class="line"></span><br><span class="line"># 设置包含头文件目录</span><br><span class="line"><span class="built_in">include_directories</span>($&#123;CMAKE_SOURCE_DIR&#125;/include)</span><br><span class="line"></span><br><span class="line"># 源文件列表</span><br><span class="line"><span class="built_in">set</span>(SOURCES</span><br><span class="line">    src/add.cpp</span><br><span class="line">    src/sub.cpp</span><br><span class="line">    src/mul.cpp</span><br><span class="line">    src/divi.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 创建静态库</span><br><span class="line"><span class="built_in">add_library</span>(cal STATIC $&#123;SOURCES&#125;)</span><br><span class="line"></span><br><span class="line"># 设置库文件输出目录</span><br><span class="line"><span class="built_in">set_target_properties</span>(cal PROPERTIES</span><br><span class="line">    ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_SOURCE_DIR&#125;/lib</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+这里的set 指将所需源文件都命名为一个变量<strong>SOURCES</strong>，以方便后面使用，然后创建静态库使用<strong>add_library</strong>，指定类型为<strong>STATIC</strong>表明是静态库，然后后面跟 **${SOURCES}**，这里的$指的是取这个变量的值，取出来也就是：<blockquote>
+<p>  src&#x2F;add.cpp<br>  src&#x2F;sub.cpp<br>  src&#x2F;mul.cpp<br>  src&#x2F;divi.cpp</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>set_target_properties</strong>这里设置库的输出路径，也就是&#x2F;lib文件夹下。<br>编写完后，ctrl+s后重新生成，可以发现lib文件夹下多了一个cal.lib文件<br><img src="https://s2.loli.net/2024/09/28/54OWsSvF8EMhitp.png" alt=".jpg"><br>这样我们就完成了静态库的制作</p>
+<h4 id="链接静态库"><a href="#链接静态库" class="headerlink" title="链接静态库"></a>链接静态库</h4><p>接下来我们尝试链接刚才生成的库文件：<br>项目结构如下：<br><img src="https://s2.loli.net/2024/09/28/I72o5ACOUi3p48F.png"><br>编写相关代码：</p>
+<ul>
+<li>main<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">5</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Add: &quot;</span> &lt;&lt; <span class="built_in">add</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sub: &quot;</span> &lt;&lt; <span class="built_in">sub</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Mul: &quot;</span> &lt;&lt; <span class="built_in">mul</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Div: &quot;</span> &lt;&lt; <span class="built_in">divi</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>CMakeList<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"># 项目名称</span><br><span class="line"><span class="built_in">project</span>(CMakeProject1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">add_executable</span>(test src/main.cpp)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_include_directories</span>(test PRIVATE include)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_link_directories</span>(test PRIVATE lib)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_link_libraries</span>(test cal)</span><br></pre></td></tr></table></figure>
+Ctrl+s保存后重新生成，运行查看结果：<br><img src="https://s2.loli.net/2024/09/28/5FuK8D3UPnVZcbL.png"><br>成功使用静态库，这样我们就学会了如何用CMake制作静态库并使用静态库</li>
+</ul>
+<h3 id="动态库与动态链接"><a href="#动态库与动态链接" class="headerlink" title="动态库与动态链接"></a>动态库与动态链接</h3><p><strong>动态库知识点回顾：</strong></p>
+<ul>
+<li>定义：动态库（Dynamic Library）是在运行时加载的库，编译时程序只链接库的接口。动态库的代码不被直接包含在可执行文件中，而是在程序运行时通过操作系统动态加载。</li>
+<li>文件扩展名：在Windows下通常是 .dll，在Unix&#x2F;Linux下通常是 .so。</li>
+<li>优点：<br>（1）共享：多个程序可以共享同一个动态库的实例，从而节省内存和磁盘空间。<br>（2）更新便利：更新动态库时，只需替换库文件，不需要重新编译依赖该库的所有程序。<br>（3）小型可执行文件：可执行文件体积小，因为它不包含库的实现。</li>
+<li>缺点：<br>（1）运行时依赖：在运行时必须确保相关的动态库存在，否则会导致程序无法启动。<br>（2）加载时间：动态库在运行时加载可能会稍微增加启动时间。<br>（3）版本控制：不同版本的动态库可能引发“地狱版本问题”，即某个程序可能需要特定版本的库，导致冲突。</li>
+</ul>
+<h4 id="制作动态库"><a href="#制作动态库" class="headerlink" title="制作动态库"></a>制作动态库</h4><p>制作动态库的过程大体和静态库一样，不过需要多注意几个步骤，下面我们同样完整的制作一个动态库。项目开始的结构：<br><img src="https://s2.loli.net/2024/09/28/U4WTHqj5EwGcb8z.png" alt="-.jpg"></p>
+<p>首先是head.h头文件：</p>
+<ul>
+<li>head.h<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> HEAD_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> HEAD_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> MYLIBRARY_EXPORTS</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MYLIBRARY_API __declspec(dllexport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MYLIBRARY_API __declspec(dllimport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">int</span> <span class="title">mul</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">double</span> <span class="title">divi</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+这里我们使用宏定义来区分导入导出，也就是如果定义了了导出宏，那么就使用“__declspec(dllexport)”，如果没有定义，则为“__declspec(dllimport)”</li>
+</ul>
+<p>然后是各功能的源文件：</p>
+<ul>
+<li>add.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+可以看到add函数前面多了个“MYLIBRARY_API”，这个东西我们在head.h对其进行了定义<br>导出库时，即<strong>代表“__declspec(dllexport)”，这将告诉编译器我们要将其导出一个为库文件，如果没有这个东西，那么后面生成的库文件可能会少了.lib文件，导致生成时无法找到。 这是由于导出为动态库时，不仅包含.dll文件，还要生成一个.lib，告诉编译器动态库的信息，.lib文件在编译时就已经确定，而.dll在运行时才会去链接。</strong> 当然“__declspec(dllexport)”这个关键字只有在windows下使用MSVC的编译器才会要这样做，在其他平台上就不需要或者情况不是这样。<br>其他的源文件也类似：</li>
+<li>sub.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"><span class="function">MYLIBRARY_API <span class="type">int</span> <span class="title">sub</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+剩下的以此类推</li>
+</ul>
+<p>然后还需编写CMakeList文件：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"># 项目名称</span><br><span class="line"><span class="built_in">project</span>(CMakeProject1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">include_directories</span>($&#123;CMAKE_SOURCE_DIR&#125;/include)</span><br><span class="line"></span><br><span class="line"># 源文件列表</span><br><span class="line"><span class="built_in">set</span>(SOURCES</span><br><span class="line">    src/add.cpp</span><br><span class="line">    src/sub.cpp</span><br><span class="line">    src/mul.cpp</span><br><span class="line">    src/divi.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 创建动态库，定义 MYLIBRARY_EXPORTS 宏以导出符号</span><br><span class="line"><span class="built_in">add_library</span>(cal SHARED $&#123;SOURCES&#125;)</span><br><span class="line"><span class="built_in">target_compile_definitions</span>(cal PRIVATE MYLIBRARY_EXPORTS)</span><br><span class="line"></span><br><span class="line"># 设置库文件输出目录</span><br><span class="line"><span class="built_in">set_target_properties</span>(cal PROPERTIES</span><br><span class="line">    ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_SOURCE_DIR&#125;/lib</span><br><span class="line">    LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_SOURCE_DIR&#125;/lib</span><br><span class="line">    RUNTIME_OUTPUT_DIRECTORY $&#123;CMAKE_SOURCE_DIR&#125;/lib</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里的set 指将所需源文件都命名为一个变量<strong>SOURCES</strong>，以方便后面使用，然后创建动态库也使用<strong>add_library</strong>，只不过我们要指定为<strong>SHARED</strong>，而<strong>target_compile_definitions</strong>则代表在编译时的宏定义，即定义为导出，那么上面的<strong>MYLIBRARY_API</strong> 就代表  <strong>__declspec(dllexport)<strong>。</strong>set_target_properties</strong>这个语句则代表库文件的输出目录，可以指定所生成库文件相关的东西的输出目录，这三个分别代表：</p>
+<ul>
+<li>ARCHIVE_OUTPUT_DIRECTORY：指定静态库（.lib 或 .a 文件）的输出目录。</li>
+<li>LIBRARY_OUTPUT_DIRECTORY：指定动态库（.dll 或 .so 文件）的输出目录。</li>
+<li>RUNTIME_OUTPUT_DIRECTORY：指定可执行文件和动态库的运行时文件的输出目录。</li>
+</ul>
+<p>经过上面几步，我们就编写好了，接下来ctrl+s保存后，生成全部，可以看到在指定的输出目录lib下多了一些东西：<br><img src="https://s2.loli.net/2024/09/28/aY8MlUA7IhDiTxz.png"><br>至此我们就完成了动态库的制作。</p>
+<h4 id="链接动态库"><a href="#链接动态库" class="headerlink" title="链接动态库"></a>链接动态库</h4><p>我们就拿刚才制作的库文件，来链接一下，重新建一个项目或者把项目结构设置成这样：<br><img src="https://s2.loli.net/2024/09/28/I72o5ACOUi3p48F.png"><br>head.h文件就不用改了，而保留cal.lib文件是因为编译时需要告诉编译器动态库的信息<br>给出相关代码（和静态库的一样其实）：</p>
+<ul>
+<li>main.cpp<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;head.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">10</span>, b = <span class="number">5</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Add: &quot;</span> &lt;&lt; <span class="built_in">add</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Sub: &quot;</span> &lt;&lt; <span class="built_in">sub</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Mul: &quot;</span> &lt;&lt; <span class="built_in">mul</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Div: &quot;</span> &lt;&lt; <span class="built_in">divi</span>(a, b) &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>编写CMakeList:<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"></span><br><span class="line"># 项目名称</span><br><span class="line"><span class="built_in">project</span>(CMakeProject1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">add_executable</span>(test src/main.cpp)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_include_directories</span>(test PRIVATE include)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_link_directories</span>(test PRIVATE lib)</span><br><span class="line"></span><br><span class="line"><span class="built_in">target_link_libraries</span>(test cal)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>target_link_directories</strong>表示目标文件所要链接的库文件，<strong>target_link_libraries</strong>则是指定去哪个路径下去找。写完后我们ctrl+s保存，全部生成，生成成功。然而，如果此时直接点击运行的话，不出意外我们又会喜提一个报错：<br><img src="https://s2.loli.net/2024/09/28/tdSCfIJYy8Hms2R.png"><br>相信很多朋友在做项目时都碰到类似的问题，找不到.dll，只是因为我们的.dll文件在可执行程序调用时，找不到它在哪，其实我们只需要让它找得到就好了，最好的方法就是直接将.dll文件放和可执行文件放在同一个路径下，或者指定.dll的路径，这里我直接把他们放在同一个目录下:<br><img src="https://s2.loli.net/2024/09/28/dnBqhpOSgyoLxYv.png"><br>这时候，我们重新运行一下，发现大功告成：<br><img src="https://s2.loli.net/2024/09/28/LOxSAeQkpJzsIWv.png"></p>
+<p>至此，我们就学会了如何制作和使用动态库了，现在我们已经可以完成所有项目（包括使用第三方库）的项目的构建了，可以随心所欲了属于是。当然，我们现在学的内容，也只是一些基本的操作与使用，其实还有很多东西，比如<strong>find_package</strong>等一些更高级的内容，这些后续有机会探讨。</p>
+<hr>
+<h1 id="跨平台"><a href="#跨平台" class="headerlink" title="跨平台"></a>跨平台</h1><p>上面我们完成了一个用CMake构建项目的简单实战，但是一开始用的话，肯定会有和我一样的疑问：<strong>CMake这么麻烦，我为什么要用CMake呢？我直接打开VS，新建一个空项目，然后添加源文件，添加头文件，再一键运行不就好了吗？</strong> 的确，打开VS直接添加文件一件运行似乎方便很多，不过在一些情况中，CMake有其强大之处：</p>
+<ul>
+<li><strong>跨平台支持</strong><br>假设我们开发了一款软件，该软件既要能在windows上运行，又要能在Linux上运行，或者在其他更多的操作系统上运行，我们在小学三年级中学过，不同的操作系统对于项目的构建是不一样的，他们有各自的一套规则，那对于同一个项目，我们想要进行编译链接生成可执行程序，就需要有不同的操作，那想要成功运行起来，我们就要针对不同的操作系统编写不同的文件，而则个工程量可是不小的，而<strong>CMake 是一个跨平台的工具，支持多种操作系统和编译器（如 Linux、macOS、Windows，支持 Makefiles、Visual Studio 项目、Xcode 项目等）。使用 CMake，开发者可以通过一套统一的构建脚本（CMakeLists.txt）来生成不同平台上的构建文件，从而避免了为每个平台编写不同的构建配置。</strong></li>
+<li><strong>更好的拓展与管理</strong><br>CMake 提供了广泛的模块支持，允许开发者根据项目的需求来添加、配置和扩展项目。通过find_package()可以轻松查找第三方库，如 Boost、OpenSSL、Qt 等。CMake 支持模块化的开发，可以管理大型项目中的多个子项目或模块。</li>
+<li><strong>简化复杂的构建过程</strong><br>对于多语言、多库、多目标的项目，手动编写平台相关的构建文件（如Makefile或Visual Studio解决方案）可能会变得极为复杂。CMake 提供了自动化和标准化的构建过程，可以处理复杂的依赖关系、库的链接以及编译选项的设置。</li>
+<li>……</li>
+</ul>
+<p>CMake 之所以成为主流的构建工具，是因为它解决了跨平台编译、依赖管理、复杂项目构建等方面的痛点，简化了开发者的构建流程，并且提供了良好的可扩展性和灵活性。尤其对于需要支持多个操作系统和编译器的项目，CMake 会是个好的选择。  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>学习并使用CMake的过程中，我们还学习了很多本质的东西，与其说在学CMake，倒不如说是在学如何去构建一个项目，学习编译链接原理，CMake看似复杂的背后其实蕴含了很多“基础”的东西，知其然好，知其所以然更好，只有知道自己在做什么，以及去做的途径与方法，才能把事情做好，正如开头所言：</p>
+<pre><code>“一个厨子做菜，抛开味道不谈，他至少得知道原材料是什么以及原材料在哪。”
+</code></pre>
+<p>好好享受做菜的过程吧！</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bistukk.github.io/2024/09/08/CMake%E7%94%A8%E4%B8%80%E7%94%A8%E5%B0%B1%E4%BC%9A%E4%BA%86%EF%BC%81%EF%BC%9F/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2024/04/17/%E6%8E%A2%E7%A9%B6C-%E4%B8%AD%E7%9A%84%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E3%80%81move%E3%80%81forward/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">探究C++中的移动语义（左值、右值、引用、move）</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+    
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022-2024
+        <i class="ri-heart-fill heart_icon"></i> Capper
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="L I V E"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
