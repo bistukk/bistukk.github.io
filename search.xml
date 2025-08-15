@@ -927,4 +927,202 @@ Ctrl+s保存后重新生成，运行查看结果：<br><img src="https://s2.loli
 <h2 id="补图"><a href="#补图" class="headerlink" title="补图"></a>补图</h2><p><img src="https://s2.loli.net/2025/01/28/ufBxpehn5WXjQcT.jpg" alt="干杯！"><br><img src="https://s2.loli.net/2025/01/28/spStDucNaZ2w9rI.jpg" alt="海边捞"><br><img src="https://s2.loli.net/2025/01/28/H6wc9MogJIBe7Uu.jpg" alt="沾衣欲湿杏花雨"><br><img src="https://s2.loli.net/2025/01/28/KDPRMCfQjISAh6z.jpg" alt="讲好中国故事"><br><img src="https://s2.loli.net/2025/01/28/qO4DHvRU6jImwoX.jpg" alt="淮南行"><br><img src="https://s2.loli.net/2025/01/28/fZqnENOQyctjFou.jpg" alt="响沙湾"><br><img src="https://s2.loli.net/2025/01/28/GNj4qPTSuxnfMWZ.jpg" alt="20岁"><br><img src="https://s2.loli.net/2025/01/28/JCOgiPtsp4oB9rx.png" alt="你想活出怎样的人生？"><br><img src="https://s2.loli.net/2025/01/28/7FkMurXNpDPGqbd.jpg" alt="世界人民大团结万岁！"><br><img src="https://s2.loli.net/2025/01/28/DTWo16ghsiVmPIX.jpg" alt="爱是奔赴着不朽的"><br><strong>无限进步！</strong></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>git历险记(持续更新ing)</title>
+    <url>/2025/08/11/git%E5%8E%86%E9%99%A9%E8%AE%B0/</url>
+    <content><![CDATA[<p><img src="https://s2.loli.net/2024/03/30/1nQkwjTGWZaVMIo.png">  </p>
+<hr>
+<p>十年工程师：好，欢迎加入idjatsni公司，你先熟悉一下，调整调整<br>小灯：okok    </p>
+<p>在工作中，git已然成为一项必备技能，git虽然看起来不像其他知识那样复杂，但是想要用好git也不是一件容易的事情，当面对的团队合作项目越来越复杂时，当在职场种摸爬滚打也越来越久时，我们必然会碰到各种各样的团队协作问题。</p>
+<span id="more"></span>  
+<p>面对各种情景，如果不知道如何处理，则会拖慢整体开发效率，甚至无法完成开发。基于此，我站在一个基础初学者的角度，结合个人工作中经常碰到的各种情形，整理出这份面向场景的git使用方案，暂且称它为“git历险记吧”</p>
+<hr>
+<p>前言：先学习一些基础概念，比如git是什么，分支是什么，节点是什么等。推荐基础资料学习：  </p>
+<blockquote>
+<p>我的博客：《git入门实践（入门）》<br>动画网站：<a href="https://learngitbranching.js.org/?locale=zh_CN">https://learngitbranching.js.org/?locale=zh_CN</a><br>other</p>
+</blockquote>
+<p>首先先申请公司各种账号，这里主要是代码托管平台的账号，比如gitlab上的，根据公司步骤来即可</p>
+<h1 id="s1-安装git"><a href="#s1-安装git" class="headerlink" title="s1. 安装git"></a>s1. 安装git</h1><ul>
+<li>mac环境</li>
+</ul>
+<ol>
+<li>先安装Homebrew，官网下载，或者终端执行： <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/bin/zsh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>打开终端执行： <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>windows环境</li>
+</ul>
+<ol>
+<li>访问官网下载安装包：<a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></li>
+<li>下载后运行安装程序，默认选项一般都可以直接下一步。</li>
+</ol>
+<ul>
+<li>检查环境<br>安装好后，终端运行  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">    git --version</span><br><span class="line">    ```  </span><br><span class="line">    显示版本号即安装成功  </span><br><span class="line"></span><br><span class="line">-- --</span><br><span class="line"><span class="comment"># s2. 最小配置</span></span><br><span class="line">最小配置，要配置用户名和邮箱，在命令行中：    </span><br><span class="line"> ```sh</span><br><span class="line">    git config global user.name <span class="string">&quot;你的名字&quot;</span></span><br><span class="line">    git config global user.email <span class="string">&quot;你的邮箱@example.com&quot;</span></span><br><span class="line">```    </span><br><span class="line">然后执行命令查看生效:</span><br><span class="line">```sh</span><br><span class="line">    git config --global --list</span><br></pre></td></tr></table></figure>
+若显示出user.name和user.email，则配置成功  <blockquote>
+<p>PS: 这里的global参数指的是配置在当前用户生效，也就是该用户所有仓库生效，另外还有local，system</p>
+</blockquote>
+</li>
+</ul>
+<p>三种配置作用范围：</p>
+<ul>
+<li>local： 仅当前仓库生效</li>
+<li>global： 当前用户在所有仓库生效</li>
+<li>system： 系统所有用户和仓库生效</li>
+</ul>
+<p>优先级: system -&gt; global -&gt; local</p>
+<h1 id="s3-配置公私钥"><a href="#s3-配置公私钥" class="headerlink" title="s3. 配置公私钥"></a>s3. 配置公私钥</h1><p>配置公私钥来让传输更快速和安全，现在应该是必备的了</p>
+<ol>
+<li><p>生成ssh key并复制</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;你的邮箱@example.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p> 执行完后会生成一个公钥和一个私钥,分别在：</p>
+<blockquote>
+<p>~&#x2F;.ssh&#x2F;id_ed25519 (私钥，得保管好)<br>~&#x2F;.ssh&#x2F;id_ed25519.pub （公钥）  </p>
+</blockquote>
+</li>
+<li><p>然后把公钥的内容复制，放到远程代码托管平台的制定公钥位置上，比如github、gitlab、gitee，看公司用的是什么，然后测试连接：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>对于这里的“<a href="mailto:&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a>”，一般公司都有自己的制定地址名称，替换即可。成功的话，会看到：Hi username!</p>
+</li>
+</ol>
+<h1 id="s4-xxx-permission-denied"><a href="#s4-xxx-permission-denied" class="headerlink" title="s4. xxx permission denied"></a>s4. xxx permission denied</h1><p>假如碰上这个提示，一般就是权限不够，找对应仓库的负责人或者有权限的管理者，帮开通权限</p>
+<h1 id="s5-配置新项目环境"><a href="#s5-配置新项目环境" class="headerlink" title="s5. 配置新项目环境"></a>s5. 配置新项目环境</h1><p>一般项目配置都会有文档教程，按照文档优先配置，可以去问对应的十年工程师，常规步骤</p>
+<ol>
+<li><p>克隆项目到本地，命令输入</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> 仓库地址</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.loli.net/2025/08/16/AXnfSDuvjbZsNIB.png" alt="repoAdress.png"><br> 如上述就可以用ssh的，执行：</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:bistukk/kkMusic.git</span><br></pre></td></tr></table></figure>
+<p> 执行完后，项目就会顺利clone到本地    </p>
+</li>
+<li><p>如果项目是用子仓库嵌套的方式组织的话，那应该还需要执行</p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git submodule update --init --recursive --progress</span><br></pre></td></tr></table></figure>
+<p> 这将会拉取所有子模块代码并更新到最新版本（关于submodule，后面会详细讲到）  </p>
+</li>
+<li><p>切换到指定分支</p>
+<ul>
+<li>查看当前分支  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git branch </span><br></pre></td></tr></table></figure>
+  这将会列出你当前本地所在的分支, 后面可以加-a参数，-r参数，-v参数，表示所有，远程，详细信息</li>
+<li>查看当前节点  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure></li>
+<li>切换到指定分支（本地没有，远端有）  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git switch -c &lt;本地分支名&gt; origin/&lt;远程分支名&gt;</span><br></pre></td></tr></table></figure></li>
+<li>如果有子模块有特定分支需要切换，则手动进入子模块目录，执行切换分支操作</li>
+</ul>
+</li>
+</ol>
+<p>自此，如果合理按照文档的配置，并且已经切换到对应的分支节点了，项目一般就能编译运行了，接下来进入开发,进入之前先来了解git的几个区域</p>
+<h1 id="s6-工作区，暂存区，本地仓库，远程仓库"><a href="#s6-工作区，暂存区，本地仓库，远程仓库" class="headerlink" title="s6. 工作区，暂存区，本地仓库，远程仓库"></a>s6. 工作区，暂存区，本地仓库，远程仓库</h1><p>首先要先知道git的工作流转有这四个区域</p>
+<ol>
+<li>工作区(Working Directory)<br> 工作区其实就是项目clone下来后的文件地方内容，平时看到、编辑文件的目录<br> 修改的文件最开始都是在工作区。</li>
+<li>暂存区（taging Area &#x2F; Index）<br> git add 会把工作区的修改放到这里，准备提交<br> 可以理解为“提交前的缓冲区”，将工作区的东西放入在暂存区： <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure></li>
+<li>本地仓库（Local Repository &#x2F; HEAD 所指向的仓库）<br> 保存了提交历史（commit），git commit 会把暂存区内容提交到本地仓库。HEAD 指向当前分支的最新提交，通过git commit将暂存区的内容提交到本地仓库 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git commit -m<span class="string">&quot;本次修改内容信息&quot;</span></span><br></pre></td></tr></table></figure>
+ 这将会再本地仓库生成一个提交记录，commit节点</li>
+<li>远程仓库<br> 托管在服务器上的仓库，比如 GitHub、GitLab、公司自建 Git 服务器。本地仓库通过网络与远程仓库同步。保存了所有共享历史，供团队协作使用。用git push将本地仓库的内容推送到远端关联仓库 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git push</span><br></pre></td></tr></table></figure>
+一定要牢记有这四个区域，虽然很简单，但是后续很多命令其实都需要对区域有清楚的划分。接下来进入场景篇，顺序难度不分先后，start adventure</li>
+</ol>
+<h1 id="s7-在基线分支进行了修改，想开新的分支并包含此次内容，并在新开分支上开发"><a href="#s7-在基线分支进行了修改，想开新的分支并包含此次内容，并在新开分支上开发" class="headerlink" title="s7. 在基线分支进行了修改，想开新的分支并包含此次内容，并在新开分支上开发"></a>s7. 在基线分支进行了修改，想开新的分支并包含此次内容，并在新开分支上开发</h1><ol>
+<li>改动尚未commit（仍在工作区&#x2F;暂存区） <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建并切换到新分支，改动自动跟过来</span></span><br><span class="line">git switch -c feature/new-branch</span><br><span class="line"><span class="comment"># 或者较旧版本 Git</span></span><br><span class="line">git checkout -b feature/new-branch</span><br></pre></td></tr></table></figure>
+ 然后就直接在feature&#x2F;new-branch 上继续开发，baseline 保持原状。</li>
+<li>改动已 commit 但还没 push 到远端<br> 先把 commit 带到新分支，再把 baseline 分支回退<ul>
+<li>新开分支并保留改动 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git switch -c feature/new-branch        <span class="comment"># 新分支里已有那些 commit</span></span><br></pre></td></tr></table></figure></li>
+<li>切回 baseline 并撤掉那些 commit <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git switch baseline</span><br><span class="line">git reset --hard origin/baseline </span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>改动已 push 到远端，但希望从 baseline 分支“分离”出来<br>建议保持 baseline 历史不动，直接从对应 commit 打出新分支即可，然后跟团队成员交流baseline如何处理 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 从含有改动的最新提交打新分支</span></span><br><span class="line">git switch -c feature/new-branch</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="S8-想把某个commit节点应用到另一个某个分支节点上"><a href="#S8-想把某个commit节点应用到另一个某个分支节点上" class="headerlink" title="S8. 想把某个commit节点应用到另一个某个分支节点上"></a>S8. 想把某个commit节点应用到另一个某个分支节点上</h1><p>1.假设在分支 A 上开发了某个功能，有一个 commit 想要应用到分支 B 上。</p>
+<ul>
+<li><p>查看要 pick 的 commit：</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git checkout A</span><br><span class="line">git <span class="built_in">log</span> --oneline</span><br></pre></td></tr></table></figure>
+<p>  找到要挑选的 commit，比如：</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">a1b2c3d 修复了音频播放的 bug</span><br></pre></td></tr></table></figure></li>
+<li><p>切换到目标分支 B，然后cherry-pick</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git checkout B</span><br><span class="line">git cherry-pick a1b2c3d</span><br></pre></td></tr></table></figure>
+<p>2.如果commit较多，可以：</p>
+</li>
+<li><p>多个commit（不一定连续）</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git cherry-pick hash1 hash2 hash3 ...</span><br></pre></td></tr></table></figure></li>
+<li><p>多个连续 commit</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git cherry-pick hash1^..hash3</span><br></pre></td></tr></table></figure>
+<p>3.如果有冲突，需要解决，解决完后：  </p>
+<p>  git add .<br>  git cherry-pick –continue</p>
+</li>
+</ul>
+<h1 id="s9-在自己的开发分支上进行了一些开发，这时候基线分支已经有很多更新"><a href="#s9-在自己的开发分支上进行了一些开发，这时候基线分支已经有很多更新" class="headerlink" title="s9. 在自己的开发分支上进行了一些开发，这时候基线分支已经有很多更新"></a>s9. 在自己的开发分支上进行了一些开发，这时候基线分支已经有很多更新</h1><p>两种情况，一个是还打算继续在个人分支上开发，一个是直接到基线分支开发（迭代快，时间紧的时候）</p>
+<ol>
+<li>继续在个人分支上开发（个人长期开发，时间足够）<ul>
+<li><p>方法一：使用 rebase  </p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先切到自己的开发分支</span></span><br><span class="line">git switch feature/my-dev-branch</span><br><span class="line"><span class="comment"># 把基线分支的最新提交“挪到”当前分支的底部（线性历史）</span></span><br><span class="line">git fetch origin  <span class="comment"># 确保是最新</span></span><br><span class="line">git rebase origin/baseline</span><br></pre></td></tr></table></figure>
+<p>  提交会像“从基线上重新开发”一样排到最新更新之后。历史干净线性，适合个人分支开发</p>
+</li>
+<li><p>方法二：使用 merge（保留开发历史）</p>
+  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 仍然在自己的开发分支</span></span><br><span class="line">git fetch origin</span><br><span class="line">git merge origin/baseline</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>直接到基线分支开发（迭代快，时间紧的时候）<ul>
+<li>切换到基线分支并确保是最新的  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git switch baseline</span><br><span class="line">git pull origin baseline  <span class="comment"># 拉取远端最新的 baseline</span></span><br></pre></td></tr></table></figure></li>
+<li>从原来的分支 cherry-pick 提交<ul>
+<li>情况 A：只想 cherry-pick 最近的 某些次提交<br>  先用git log 找到要 pick 的 commit hash：  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">    git <span class="built_in">log</span> --oneline feature/my-dev-branch</span><br><span class="line">    ```  </span><br><span class="line"></span><br><span class="line">    然后cherry-pick想要的commit_hash:</span><br><span class="line">    ```sh</span><br><span class="line">    git cherry-pick &lt;commit_hash1&gt; &lt;commit_hash2&gt; ...</span><br><span class="line">    ```  </span><br><span class="line">- 情况 B：cherry-pick 一段连续的提交（可以用范围）</span><br><span class="line">    假设想把从 A 到 B 的一段提交 pick 到 baseline 上：</span><br><span class="line">    ```sh</span><br><span class="line">    git cherry-pick A^..B</span><br></pre></td></tr></table></figure>
+  注意：这是一个闭区间，包含 A 和 B。</li>
+</ul>
+</li>
+<li>第 3 步：解决冲突（如有）</li>
+</ul>
+</li>
+</ol>
+<h1 id="s10-commit了多次，想把多次commit合并成一个"><a href="#s10-commit了多次，想把多次commit合并成一个" class="headerlink" title="s10. commit了多次，想把多次commit合并成一个"></a>s10. commit了多次，想把多次commit合并成一个</h1><p>假设想合并最近的 3 次提交，则可以：<br> <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git rebase -i HEAD~3</span><br></pre></td></tr></table></figure><br> 然后会进入这样的编辑界面，类似：<br> <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pick 1234567 commit message 1</span><br><span class="line">pick 89abcde commit message 2</span><br><span class="line">pick fedcba9 commit message 3</span><br></pre></td></tr></table></figure><br> 将上面的内容修改为如下形式（除了第一个，其他都改为 squash 或简写 s）<br> <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pick 1234567 commit message 1</span><br><span class="line">squash 89abcde commit message 2</span><br><span class="line">squash fedcba9 commit message 3</span><br></pre></td></tr></table></figure><br> 执行后 Git 会让你编辑 commit message，比如：<br> <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"> <span class="comment"># This is a combination of 3 commits.</span></span><br><span class="line"><span class="comment"># The first commit&#x27;s message is:</span></span><br><span class="line">fix login bug</span><br><span class="line"></span><br><span class="line"><span class="comment"># The 2nd commit message:</span></span><br><span class="line">update UI layout</span><br><span class="line"></span><br><span class="line"><span class="comment"># The 3rd commit message:</span></span><br><span class="line">improve performance</span><br></pre></td></tr></table></figure><br>自己改写为一个清晰的合并提交信息，然后保存退出即可</p>
+<ul>
+<li>推送变更（如果之前已经推送过这些 commit，需要强推）  <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git push origin 分支名 --force（强推时需要force）</span><br></pre></td></tr></table></figure>
+  <mark>PS：谨慎使用 –force，因为这会改写历史，其他人基于你这分支工作的话可能会有问题。<br>  建议只在 尚未合并到主分支 或 自己一个人工作的分支 上这么做。<mark></mark></mark></li>
+</ul>
+<h1 id="s11-自己在本地开发编译运行，检查git发现除了自己的修改外还有很多变更"><a href="#s11-自己在本地开发编译运行，检查git发现除了自己的修改外还有很多变更" class="headerlink" title="s11. 自己在本地开发编译运行，检查git发现除了自己的修改外还有很多变更"></a>s11. 自己在本地开发编译运行，检查git发现除了自己的修改外还有很多变更</h1><p>比如经常：  </p>
+<p><img src="https://s2.loli.net/2025/08/16/I49ATW8XEZlqrK2.png" alt="change.png"></p>
+<ul>
+<li>可能的原因<ol>
+<li>编译生成的临时文件 &#x2F; 缓存文件未加入 .gitignore<ul>
+<li>▪	比如：*.o, *.class, build&#x2F;, .gradle&#x2F;, DerivedData&#x2F; 等。</li>
+<li>▪	常见于 C++、Java、Android、iOS 项目。</li>
+</ul>
+</li>
+<li>IDE 或构建工具自动生成的配置文件<ul>
+<li>▪	比如：xcuserdata&#x2F;, .idea&#x2F;, .vscode&#x2F;, .DS_Store。</li>
+</ul>
+</li>
+<li>pod install &#x2F; gradle sync &#x2F; CMake configure 等拉取依赖引起的变更<ul>
+<li>▪	例如 iOS 的 .xcworkspace 或 Pods 文件夹，Android 的 .gradle、*.iml 文件等。</li>
+</ul>
+</li>
+<li>代码格式化工具自动修改了代码<ul>
+<li>▪	例如 clang-format, prettier, ktlint 自动调整了自己没关注的文件。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>解决方案：<ol>
+<li>方式一：将无关文件添加到 .gitignore。<br>  比如看到的 build&#x2F;, .idea&#x2F;, Pods&#x2F;, *.pbxuser 等变动，可以在根目录的 .gitignore 文件中加： <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># iOS</span></span><br><span class="line">*.xcuserdatad</span><br><span class="line">*.xcscmblueprint</span><br><span class="line">*.pbxuser</span><br><span class="line">*.mode1v3</span><br><span class="line">*.mode2v3</span><br><span class="line">DerivedData/</span><br><span class="line">Pods/</span><br><span class="line"><span class="comment"># Android</span></span><br><span class="line">*.iml</span><br><span class="line">.gradle/</span><br><span class="line">build/</span><br><span class="line">.idea/</span><br><span class="line"><span class="comment"># macOS</span></span><br><span class="line">.DS_Store</span><br></pre></td></tr></table></figure>
+ 然后执行： <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git restore --staged &lt;文件名&gt;     <span class="comment"># 如果已经被 add</span></span><br><span class="line">git restore &lt;文件名&gt;              <span class="comment"># 恢复修改</span></span><br></pre></td></tr></table></figure></li>
+<li>方式二：只 add 实际改动的文件   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git add 文件1 文件2 文件3</span><br><span class="line">git commit -m <span class="string">&quot;只提交你需要的内容&quot;</span></span><br></pre></td></tr></table></figure>
+ 建议用 git diff &#x2F; git status 仔细检查后再 git add。</li>
+</ol>
+</li>
+</ul>
+<h1 id="s12-Git-hook"><a href="#s12-Git-hook" class="headerlink" title="s12. Git hook"></a>s12. Git hook</h1><p>&amp;emsp; “Git Hook”这个名字里的“Hook”，来源于计算机编程中的“hook”概念，意思是“钩子”或“挂钩”。<br>&amp;emsp; Git hook 是放在 .git&#x2F;hooks&#x2F; 目录下的一组脚本文件（Linux&#x2F;Mac 是 shell 脚本，Windows 也可以是 batch 脚本或其他可执行文件）。<br>&amp;emsp; 每个 hook 脚本对应 Git 操作的某个阶段，比如提交前、提交后、推送前等。<br>&amp;emsp; 默认目录下有很多示例脚本，文件名一般是钩子的名字（比如 pre-commit、commit-msg 等），但默认都是 .sample 后缀，需要去掉 .sample 并确保可执行，才能生效。<br>比如：<br>    <img src="/.io//image-19.png" alt="alt text">  </p>
+<p> 比如在pre-commit中，可以有：<br> <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#!/bin/sh</span></span><br><span class="line"><span class="comment"># 简单示例：禁止提交包含 TODO 的代码</span></span><br><span class="line"><span class="keyword">if</span> git diff --cached | grep -q <span class="string">&#x27;TODO&#x27;</span>; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">&quot;Error: Commit contains TODO.&quot;</span></span><br><span class="line">  <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure><br> 给脚本加权限：chmod +x .git&#x2F;hooks&#x2F;pre-commit<br> 测试提交时，如果暂存区的变更里包含 TODO，提交会被阻止。</p>
+<p> <strong>实战例子</strong><br> 别人的一些功能别人没有适配也会影响到分支导致无法commit<br> 应对方案，可以把git hook关了，命令行可在commit的时候手动加上 –no-verify<br>或者图形界面设置(比如在android studio里)</p>
+<h1 id="s13-submodule相关"><a href="#s13-submodule相关" class="headerlink" title="s13. submodule相关"></a>s13. submodule相关</h1><p>在 Git 中，submodule（子模块）是一个 Git 仓库中的嵌套仓库。当你想在一个 Git 仓库中引用另一个独立的 Git 仓库（比如作为依赖库），就可以使用 submodule。  </p>
+<p>&amp;emsp;<strong>子模块的特点</strong></p>
+<ul>
+<li>子模块不随主仓库自动更新：它只是记录了一个特定的提交（commit）引用。</li>
+<li>更新子模块需要手动执行；</li>
+<li>删除子模块比普通文件稍复杂（因为有多个配置项需要清理）；</li>
+</ul>
+<ol>
+<li><p>更新子仓库  </p>
+ <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git submodule update --init --recursive --progress</span><br></pre></td></tr></table></figure>
+<p> 这将会把所有子仓库更新到最新的提交引用，加上–progress可以查看进度，避免卡太久不知道什么情况。</p>
+</li>
+<li><p>有时需要特定版本的子仓库，则在执行更新子仓库后，需要自己切进特定分支，切换对应的分支节点。</p>
+</li>
+<li><p>注意，子仓库有变更，主项目如果需要应该子仓库变更的节点的话，也应该提交变更的子仓库节点引用</p>
+</li>
+</ol>
+]]></content>
+  </entry>
 </search>
